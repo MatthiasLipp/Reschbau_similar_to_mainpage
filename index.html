@@ -392,13 +392,14 @@
 
   const TOTAL = 5;
   let step = 1;
+  let firstStep = 1;
   const answers = {};
   const modal = document.getElementById('checkModal');
   const WA_NUMBER = '4300000000000'; // Platzhalter – echte RESCH|Bau-Nummer eintragen
 
   function openCheck(preset) {
-    step = 1;
-    if (preset) answers['Projekttyp'] = preset;
+    if (preset) { answers['Projekttyp'] = preset; firstStep = 2; } else { firstStep = 1; }
+    step = firstStep;
     syncSelections(); showStep();
     modal.classList.add('open'); modal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
@@ -424,9 +425,11 @@
   }
   function showStep() {
     document.querySelectorAll('.q-step').forEach(s => s.classList.toggle('active', +s.dataset.step === step));
-    document.getElementById('progBar').style.width = (step / TOTAL * 100) + '%';
-    document.getElementById('stepLabel').textContent = `Schritt ${step} von ${TOTAL}`;
-    document.getElementById('backBtn').style.visibility = step === 1 ? 'hidden' : 'visible';
+    const shownTotal = TOTAL - firstStep + 1;
+    const shownStep = step - firstStep + 1;
+    document.getElementById('progBar').style.width = (shownStep / shownTotal * 100) + '%';
+    document.getElementById('stepLabel').textContent = `Schritt ${shownStep} von ${shownTotal}`;
+    document.getElementById('backBtn').style.visibility = step === firstStep ? 'hidden' : 'visible';
     document.getElementById('nextBtn').textContent = step === TOTAL ? 'Per WhatsApp senden' : 'Weiter';
     if (step === TOTAL) renderSummary();
   }
@@ -443,7 +446,7 @@
     if (step < TOTAL) { step++; showStep(); return; }
     submitCheck();
   }
-  function prevStep() { if (step > 1) { step--; showStep(); } }
+  function prevStep() { if (step > firstStep) { step--; showStep(); } }
   function submitCheck() {
     const name = document.getElementById('qName').value.trim();
     const note = document.getElementById('qNote').value.trim();
