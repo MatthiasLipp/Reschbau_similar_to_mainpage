@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>RESCH|Bau – Baukosten-Check | Was kostet Ihr Neubau ungefähr?</title>
-<meta name="description" content="Baukosten-Check von RESCH|Bau: Beantworten Sie ein paar kurze Fragen und erhalten Sie Ihre grobe Preisrange sofort per WhatsApp." />
+<meta name="description" content="Baukosten-Check von RESCH|Bau: Beantworten Sie ein paar kurze Fragen zu Ihrem Neubau – Ihre grobe Preisrange erhalten Sie anschließend per WhatsApp." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
@@ -16,12 +16,7 @@
   a { color:inherit; text-decoration:none; }
   .wrap { width:min(1140px,92vw); margin-inline:auto; }
 
-  .topbar { padding:1.6rem 0 .4rem; }
-  .mainnav { display:flex; gap:clamp(.9rem,3vw,2.6rem); justify-content:center; flex-wrap:wrap; }
-  .mainnav a { text-transform:uppercase; letter-spacing:.14em; font-size:.9rem; font-weight:600; color:#1a1a1a; padding-top:.7rem; border-top:2px solid #cfcfcf; transition:border-color .15s, color .15s; }
-  .mainnav a:hover, .mainnav a.active { border-top-color:var(--black); }
-
-  .brand { text-align:center; padding:1.4rem 0 .6rem; }
+  .brand { text-align:center; padding:2.2rem 0 .6rem; }
   .logo { display:inline-flex; align-items:center; background:var(--black); color:#fff; font-weight:800; font-size:clamp(2rem,5.5vw,3.1rem); line-height:1; padding:.3em .55em .3em .28em; border-radius:.42em; letter-spacing:.005em; }
   .logo-r { display:inline-grid; place-items:center; width:1.4em; height:1.4em; border-radius:50%; background:var(--black); border:.055em solid #3c3c3c; color:var(--red); font-weight:800; margin-right:.08em; box-shadow:0 0 0 .03em #000 inset; }
   .logo-bar { width:.055em; height:.95em; background:#fff; margin:0 .28em; opacity:.9; }
@@ -30,18 +25,11 @@
   .logo-roof::before { content:""; position:absolute; top:-.42em; left:50%; transform:translateX(-50%); border-left:.5em solid transparent; border-right:.5em solid transparent; border-bottom:.45em solid var(--red); }
   .brand-tag { margin-top:.7rem; text-transform:uppercase; letter-spacing:.42em; font-weight:700; font-size:clamp(.7rem,1.6vw,.95rem); color:#3a3a3a; padding-left:.42em; }
 
-  .hero { padding:1.5rem 0 1rem; }
-  .headline { font-size:clamp(1.8rem,4.4vw,2.7rem); font-weight:800; color:var(--black); margin:.4rem 0 1.6rem; letter-spacing:-.01em; }
+  .hero { padding:1.2rem 0 .5rem; text-align:center; }
+  .headline { font-size:clamp(1.8rem,4.4vw,2.7rem); font-weight:800; color:var(--black); margin:.2rem 0 1rem; letter-spacing:-.01em; }
   .headline .v { color:var(--red); }
-  .badge { display:inline-block; background:var(--black); color:#fff; font-weight:700; text-transform:uppercase; letter-spacing:.28em; font-size:.82rem; padding:.55rem 1.4rem; margin-bottom:1.1rem; }
-  .gbox { background:var(--box); padding:clamp(1.4rem,3vw,2.2rem); margin-bottom:1.4rem; }
-  .gbox p { margin:0 0 1.2rem; text-align:justify; color:#333; font-size:1.05rem; }
-  .gbox p:last-of-type { margin-bottom:0; }
-  .gbox .q { font-weight:800; color:var(--black); font-size:1.18rem; }
-  .gbox strong { color:var(--black); }
-  .btn-red { display:inline-flex; align-items:center; gap:.6rem; background:var(--red); color:#fff; font-weight:700; font-size:1.02rem; padding:.95rem 1.8rem; border:0; cursor:pointer; text-transform:uppercase; letter-spacing:.06em; transition:background .15s, transform .1s; }
-  .btn-red:hover { background:var(--red-dk); }
-  .btn-red:active { transform:translateY(1px); }
+  .badge { display:inline-block; background:var(--black); color:#fff; font-weight:700; text-transform:uppercase; letter-spacing:.28em; font-size:.82rem; padding:.55rem 1.4rem; margin-bottom:1rem; }
+  .introline { color:#444; max-width:60ch; margin:0 auto 1.8rem; font-size:1.05rem; }
 
   section { padding:clamp(2rem,4vw,3rem) 0; }
   .sec-title { font-size:clamp(1.5rem,3vw,2rem); font-weight:800; color:var(--black); margin:0 0 .3rem; }
@@ -55,13 +43,6 @@
   .card-body { padding:1.5rem 1.5rem 1.7rem; }
   .card-body h3 { font-size:1.22rem; font-weight:800; color:var(--black); margin:0 0 .6rem; }
   .card-body p { margin:0; color:#4a4a4a; text-align:justify; font-size:.98rem; }
-
-  .type-section { background:#f6f6f6; }
-  .type-bars { display:grid; grid-template-columns:1fr; gap:1.2rem; margin-top:1.4rem; }
-  .type-bar { background:var(--black); color:#fff; border:0; cursor:pointer; padding:1.6rem 1.2rem; font-family:inherit; font-weight:700; font-size:1.1rem; letter-spacing:.03em; display:flex; align-items:center; justify-content:center; gap:.7rem; transition:background .15s; }
-  .type-bar:hover { background:var(--red); }
-  .type-bar .arrow { color:var(--red); transition:color .15s; }
-  .type-bar:hover .arrow { color:#fff; }
 
   .faq { max-width:860px; }
   .qa { border-bottom:1px solid var(--line); }
@@ -81,20 +62,17 @@
   footer .fcopy { color:var(--muted); font-size:.9rem; margin-top:.5rem; }
   footer .freg { color:var(--muted); font-size:.88rem; margin-top:.2rem; }
 
-  /* Modal funnel */
-  .modal { position:fixed; inset:0; z-index:100; display:none; }
-  .modal.open { display:block; }
-  .modal-bg { position:absolute; inset:0; background:rgba(0,0,0,.6); }
-  .modal-panel { position:relative; background:#fff; width:min(620px,94vw); margin:clamp(1rem,4vh,3rem) auto; box-shadow:0 30px 80px -20px rgba(0,0,0,.6); overflow:hidden; max-height:92vh; display:flex; flex-direction:column; }
-  .modal-head { padding:1.3rem 1.6rem 1rem; background:var(--black); color:#fff; }
-  .modal-head .bar { height:6px; background:#3a3a3a; overflow:hidden; margin-bottom:.9rem; }
-  .modal-head .bar i { display:block; height:100%; background:var(--red); width:6%; transition:width .3s; }
-  .modal-head .row { display:flex; align-items:center; justify-content:space-between; }
-  .modal-head .step-label { font-size:.8rem; font-weight:600; color:#c9c9c9; letter-spacing:.04em; }
-  .modal-close { background:none; border:0; font-size:1.5rem; line-height:1; cursor:pointer; color:#c9c9c9; padding:.2rem .4rem; }
-  .modal-body { padding:1.6rem; overflow-y:auto; }
-  .modal-body.shake { animation:shake .3s; }
+  /* ---------- Inline-Funnel ---------- */
+  .funnel { max-width:640px; margin:0 auto; border:1px solid var(--line); background:#fff; box-shadow:0 14px 44px -22px rgba(0,0,0,.35); text-align:left; }
+  .fhead { padding:1.1rem 1.5rem .9rem; background:var(--black); color:#fff; }
+  .fhead .bar { height:6px; background:#3a3a3a; overflow:hidden; margin-bottom:.7rem; }
+  .fhead .bar i { display:block; height:100%; background:var(--red); width:6%; transition:width .3s; }
+  .fhead .step-label { font-size:.8rem; font-weight:600; color:#c9c9c9; letter-spacing:.04em; }
+  .fbody { padding:1.6rem; }
+  .fbody.shake { animation:shake .3s; }
   @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+  .ffoot { padding:1rem 1.5rem 1.4rem; border-top:1px solid var(--line); display:flex; justify-content:space-between; gap:.8rem; }
+
   .qtitle { color:var(--black); font-size:1.25rem; margin:0 0 .35rem; font-weight:800; }
   .qhint { color:var(--muted); margin:0 0 1.2rem; font-size:.95rem; }
 
@@ -124,11 +102,6 @@
   .qextra input { width:100%; font:inherit; padding:.8rem 1rem; border:2px solid var(--line); background:#fff; }
   .qextra input:focus { outline:2px solid rgba(207,32,39,.45); border-color:var(--red); }
 
-  .result { text-align:center; background:var(--black); color:#fff; padding:1.5rem 1rem; margin-bottom:1.2rem; }
-  .result .reb { font-size:.78rem; text-transform:uppercase; letter-spacing:.2em; color:var(--red); font-weight:700; }
-  .result .range { font-weight:800; font-size:clamp(1.7rem,5vw,2.3rem); margin:.4rem 0; }
-  .result .rnote { font-size:.82rem; color:rgba(255,255,255,.7); }
-
   .field { display:grid; gap:.4rem; margin-bottom:1rem; }
   .field label { font-weight:700; font-size:.9rem; color:var(--black); }
   .field input { font:inherit; padding:.85rem 1rem; border:2px solid var(--line); background:#fff; width:100%; }
@@ -139,7 +112,9 @@
   .summary span:first-child { color:var(--muted); }
   .summary span:last-child { font-weight:700; text-align:right; color:var(--black); }
   .wa-note { display:flex; gap:.6rem; align-items:flex-start; background:#eef9f1; border:1px solid #bfe6cc; padding:.9rem 1rem; font-size:.88rem; color:#1d4a2c; }
-  .modal-foot { padding:1rem 1.6rem 1.4rem; border-top:1px solid var(--line); display:flex; justify-content:space-between; gap:.8rem; }
+  .btn-red { display:inline-flex; align-items:center; gap:.6rem; background:var(--red); color:#fff; font-weight:700; font-size:1rem; padding:.85rem 1.6rem; border:0; cursor:pointer; text-transform:uppercase; letter-spacing:.05em; transition:background .15s, transform .1s; }
+  .btn-red:hover { background:var(--red-dk); }
+  .btn-red:active { transform:translateY(1px); }
   .btn-ghost { background:#fff; color:var(--black); border:2px solid var(--line); font-family:inherit; font-weight:700; padding:.85rem 1.5rem; cursor:pointer; text-transform:uppercase; letter-spacing:.05em; font-size:.92rem; }
   .btn-ghost:hover { border-color:#b3b3b3; }
 
@@ -150,17 +125,7 @@
 
 <a id="top"></a>
 
-<div class="topbar">
-  <nav class="mainnav">
-    <a href="#top" class="active">Home</a>
-    <a href="#ablauf">Unternehmen</a>
-    <a href="#projekt-check">Leistungen</a>
-    <a href="#ablauf">Galerie</a>
-    <a href="#faq">Aktuelles</a>
-    <a href="#projekt-check">Kontakt</a>
-  </nav>
-</div>
-
+<!-- LOGO -->
 <div class="brand">
   <div class="logo" aria-label="RESCH Bau GmbH">
     <span class="logo-r">R</span><span>ESCH</span><span class="logo-bar"></span><span class="logo-bau"><span class="logo-roof">GmbH</span>BAU</span>
@@ -168,38 +133,41 @@
   <div class="brand-tag">Planungs- &amp; Bauunternehmen</div>
 </div>
 
+<!-- HERO + INLINE-FUNNEL -->
 <section class="hero">
   <div class="wrap">
     <h1 class="headline">Wir realisieren Ihre <span class="v">V</span>ision.</h1>
     <span class="badge">Baukosten-Check</span>
-    <div class="gbox">
-      <p class="q">Was kostet Ihr Neubau ungefähr?</p>
-      <p>Beantworten Sie ein paar kurze Fragen zu Ihrem Bauvorhaben. <strong>RESCH|Bau</strong> berechnet daraus Ihre grobe Preisrange und sendet sie Ihnen direkt per WhatsApp – schnell, kostenlos und völlig unverbindlich. So erhalten Sie für Ihren Neubau in <strong>Wien, Niederösterreich</strong> und dem <strong>Burgenland</strong> eine erste realistische Orientierung.</p>
+    <p class="introline">Beantworten Sie ein paar kurze Fragen zu Ihrem Neubau. Ihre grobe Preisrange erhalten Sie anschließend persönlich per WhatsApp.</p>
+
+    <div class="funnel">
+      <div class="fhead">
+        <div class="bar"><i id="progBar"></i></div>
+        <div class="step-label" id="stepLabel">Schritt 1 von 16</div>
+      </div>
+      <div class="fbody" id="qBody"></div>
+      <div class="ffoot">
+        <button class="btn-ghost" id="backBtn" onclick="prev()" style="visibility:hidden">Zurück</button>
+        <button class="btn-red" id="nextBtn" onclick="next()">Weiter</button>
+      </div>
     </div>
-    <button class="btn-red" onclick="openFunnel()">Jetzt Baukosten berechnen</button>
   </div>
 </section>
 
+<!-- ABLAUF -->
 <section id="ablauf">
   <div class="wrap">
     <h2 class="sec-title">So funktioniert der Baukosten-Check</h2>
     <p class="sec-sub">In drei Schritten zu Ihrer ersten Einschätzung.</p>
     <div class="cards">
       <div class="card"><div class="card-top"><span class="n">1</span><span class="lbl">Schritt 1</span></div><div class="card-body"><h3>Angaben ausfüllen</h3><p>Beantworten Sie ein paar kurze Fragen zu Ihrem Neubau – in 1–2 Minuten.</p></div></div>
-      <div class="card"><div class="card-top"><span class="n">2</span><span class="lbl">Schritt 2</span></div><div class="card-body"><h3>Range sofort per WhatsApp</h3><p>Ihre grobe Preisrange wird automatisch berechnet und kommt direkt per WhatsApp.</p></div></div>
+      <div class="card"><div class="card-top"><span class="n">2</span><span class="lbl">Schritt 2</span></div><div class="card-body"><h3>Range per WhatsApp</h3><p>Sie senden uns Ihre Angaben und erhalten Ihre grobe Preisrange persönlich per WhatsApp.</p></div></div>
       <div class="card"><div class="card-top"><span class="n">3</span><span class="lbl">Schritt 3</span></div><div class="card-body"><h3>Persönliches Planungsgespräch</h3><p>Für die genaue Planung und Detailfragen melden wir uns telefonisch bei Ihnen.</p></div></div>
     </div>
   </div>
 </section>
 
-<section class="type-section" id="projekt-check">
-  <div class="wrap">
-    <h2 class="sec-title">Berechnen Sie Ihre Baukosten</h2>
-    <p class="sec-sub">Ein paar kurze Fragen zu Ihrem Neubau – die grobe Preisrange kommt sofort per WhatsApp.</p>
-    <div class="type-bars"><button class="type-bar" onclick="openFunnel()">Jetzt Baukosten berechnen <span class="arrow">›</span></button></div>
-  </div>
-</section>
-
+<!-- FAQ -->
 <section id="faq">
   <div class="wrap">
     <h2 class="sec-title">Häufige Fragen</h2>
@@ -216,29 +184,14 @@
   </div>
 </footer>
 
-<div class="modal" id="checkModal" aria-hidden="true">
-  <div class="modal-bg" onclick="closeFunnel()"></div>
-  <div class="modal-panel" role="dialog" aria-modal="true" aria-label="Baukosten-Check">
-    <div class="modal-head">
-      <div class="bar"><i id="progBar"></i></div>
-      <div class="row"><span class="step-label" id="stepLabel">Schritt 1 von 16</span><button class="modal-close" aria-label="Schließen" onclick="closeFunnel()">&times;</button></div>
-    </div>
-    <div class="modal-body" id="qBody"></div>
-    <div class="modal-foot">
-      <button class="btn-ghost" id="backBtn" onclick="prev()" style="visibility:hidden">Zurück</button>
-      <button class="btn-red" id="nextBtn" onclick="next()">Weiter</button>
-    </div>
-  </div>
-</div>
-
 <script>
   const faqs = [
     ["Ist der Baukosten-Check kostenlos?", "Ja, der Baukosten-Check ist vollständig kostenlos und unverbindlich."],
-    ["Wie genau ist die Preisrange?", "Die Range wird automatisch aus Ihren Angaben berechnet und ist eine erste grobe Orientierung."],
-    ["Warum erhalte ich die Range per WhatsApp?", "WhatsApp ermöglicht eine schnelle, direkte Kommunikation."],
+    ["Wie erhalte ich meine Preisrange?", "Sie senden uns Ihre Angaben über den Check – Ihre grobe Preisrange erhalten Sie anschließend persönlich per WhatsApp."],
+    ["Warum läuft das über WhatsApp?", "WhatsApp ermöglicht eine schnelle, direkte und persönliche Kommunikation."],
     ["In welchen Regionen ist RESCH|Bau tätig?", "RESCH|Bau ist hauptsächlich in Wien, Niederösterreich und dem Burgenland tätig."],
     ["Was passiert mit meinen Daten?", "Ihre Daten werden ausschließlich zur Bearbeitung Ihrer Anfrage verwendet."],
-    ["Wie geht es nach der Schätzung weiter?", "Für die genaue Planung und Detailfragen melden wir uns persönlich und telefonisch bei Ihnen."]
+    ["Wie geht es danach weiter?", "Für die genaue Planung und Detailfragen melden wir uns persönlich und telefonisch bei Ihnen."]
   ];
   const faqList = document.getElementById('faqList');
   faqs.forEach(([q, a]) => {
@@ -248,14 +201,9 @@
     faqList.appendChild(row);
   });
 
-  /* ===== Baukosten-Funnel (16 Fragen + Live-Berechnung → WhatsApp) ===== */
+  /* ===== Baukosten-Funnel (16 Fragen, inline; Preis kommt per WhatsApp) ===== */
   const WA_NUMBER = '436765409552';
   const USE_IMAGES = false;
-
-  const PREISE_M2 = { 'Wien':[3300,4000,5300], 'Niederösterreich':[2900,3600,4300], 'Burgenland':[2600,3200,3700], 'Außerhalb dieser Region':[2900,3600,4300] };
-  const F_KELLER = { 'Kein Keller':1.0, 'Teilunterkellert':1.08, 'Vollunterkellert':1.15 };
-  const F_DACHGESCHOSS = 1.2;
-  const GARAGE_M2 = [1200, 1800];
 
   const QUESTIONS = [
     { key:'Bauvorhaben', title:'Was möchten Sie bauen?', layout:'img', type:'single', cols:2, opts:[
@@ -316,31 +264,7 @@
   ];
 
   const answers = {}; const kontakt = { name:'' }; let i = 0;
-  const modal = document.getElementById('checkModal'); const qBody = document.getElementById('qBody');
-
-  function getM2() {
-    if (answers._m2exact && +answers._m2exact > 0) return +answers._m2exact;
-    const f = answers['Wohnfläche'] || '';
-    if (f.indexOf('80–120') === 0) return 100;
-    if (f.indexOf('120–160') === 0) return 140;
-    if (f.indexOf('über 160') === 0) return 190;
-    return 140;
-  }
-  function round5000(n){ return Math.round(n/5000)*5000; }
-  function berechneRange() {
-    const m2 = getM2(); const region = answers['Region'] || 'Außerhalb dieser Region';
-    if (answers['Bauvorhaben'] === 'Garage') return { lo: round5000(GARAGE_M2[0]*m2), hi: round5000(GARAGE_M2[1]*m2), m2 };
-    const t = PREISE_M2[region] || PREISE_M2['Außerhalb dieser Region'];
-    const schluessel = (answers['Leistungsumfang'] || '').indexOf('Schlüsselfertig') === 0;
-    let lo = (schluessel ? t[1] : t[0]) * m2; let hi = (schluessel ? t[2] : t[1]) * m2;
-    const kf = F_KELLER[answers['Keller']] || 1.0; lo *= kf; hi *= kf;
-    if (answers['Dachgeschoss'] === 'Ja' && answers['Dachform'] !== 'Flachdach') { lo *= F_DACHGESCHOSS; hi *= F_DACHGESCHOSS; }
-    return { lo: round5000(lo), hi: round5000(hi), m2 };
-  }
-  const euro = n => '€ ' + Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-
-  function openFunnel(){ i=0; renderBody(); modal.classList.add('open'); modal.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; }
-  function closeFunnel(){ modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
+  const qBody = document.getElementById('qBody');
 
   function cardHTML(q,o){
     const isSel = q.type==='multi' ? (answers[q.key]||[]).includes(o.v) : answers[q.key]===o.v;
@@ -359,21 +283,21 @@
       const extra = q.exactM2 ? `<div class="qextra"><input id="m2exact" type="number" min="20" placeholder="Exakte Wohnfläche in m² (optional)" value="${answers._m2exact||''}"></div>` : '';
       qBody.innerHTML = `<h3 class="qtitle">${q.title}</h3><p class="qhint">${hint}</p>${body}${extra}`;
     } else {
-      const r = berechneRange();
       const keys = ['Bauvorhaben','Wohnfläche','Keller','Dachform','Leistungsumfang','Region'];
       const rows = keys.map(k => { let v = answers[k]; if (k==='Wohnfläche' && answers._m2exact) v = answers._m2exact + ' m²'; return `<div><span>${k}</span><span>${v||'–'}</span></div>`; }).join('');
       const extras = (answers['Extras']||[]).filter(x=>x!=='Keine Extras');
-      qBody.innerHTML = `<div class="result"><div class="reb">Ihre grobe Baukosten-Range</div><div class="range">${euro(r.lo)} – ${euro(r.hi)}</div><div class="rnote">für ca. ${r.m2} m² · inkl. USt. · grobe Orientierung auf Basis Ihrer Angaben</div></div>
+      qBody.innerHTML = `<h3 class="qtitle">Fast geschafft!</h3>
+        <p class="qhint">Wie dürfen wir Sie erreichen? Ihre grobe Preisrange senden wir Ihnen anschließend persönlich per WhatsApp.</p>
         <div class="field"><label for="qName">Name</label><input id="qName" type="text" placeholder="Vor- und Nachname" value="${kontakt.name}"></div>
         <div class="summary">${rows}${extras.length?`<div><span>Extras</span><span>${extras.join(', ')}</span></div>`:''}</div>
-        <div class="wa-note"><svg width="20" height="20" viewBox="0 0 24 24" fill="#25d366"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2Z"/></svg><span>Mit „Per WhatsApp senden" schicken Sie uns Ihre Angaben. Für die genaue Planung melden wir uns persönlich und telefonisch bei Ihnen.</span></div>`;
+        <div class="wa-note"><svg width="20" height="20" viewBox="0 0 24 24" fill="#25d366"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2Z"/></svg><span>Mit „Per WhatsApp senden" schicken Sie uns Ihre Angaben. Sie erhalten Ihre grobe Preisrange und alle Details persönlich per WhatsApp.</span></div>`;
     }
     updateChrome();
   }
   function updateChrome(){
     const total = QUESTIONS.length + 1;
     document.getElementById('progBar').style.width = ((i+1)/total*100) + '%';
-    document.getElementById('stepLabel').textContent = i < QUESTIONS.length ? `Schritt ${i+1} von ${QUESTIONS.length}` : 'Ihre Kostenschätzung';
+    document.getElementById('stepLabel').textContent = i < QUESTIONS.length ? `Schritt ${i+1} von ${QUESTIONS.length}` : 'Fast geschafft';
     document.getElementById('backBtn').style.visibility = i===0 ? 'hidden' : 'visible';
     document.getElementById('nextBtn').textContent = i===QUESTIONS.length ? 'Per WhatsApp senden' : 'Weiter';
   }
@@ -397,23 +321,23 @@
       let ok = q.type==='multi' ? (sel && sel.length) : !!sel;
       if (q.exactM2 && answers._m2exact && +answers._m2exact > 0) ok = true;
       if (!ok) { shakeBody(); return; }
-      i++; renderBody(); return;
+      i++; renderBody(); window.scrollTo({top:0,behavior:'smooth'}); return;
     }
     captureContact();
     if (!kontakt.name) { const n=document.getElementById('qName'); if (n) n.focus(); shakeBody(); return; }
     submit();
   }
-  function prev(){ if (i>0) { if (i===QUESTIONS.length) captureContact(); i--; renderBody(); } }
+  function prev(){ if (i>0) { if (i===QUESTIONS.length) captureContact(); i--; renderBody(); window.scrollTo({top:0,behavior:'smooth'}); } }
   function submit(){
-    const r = berechneRange();
-    const lines = ['Hallo RESCH|Bau, ich interessiere mich für einen Neubau.', '', `*Grobe Baukosten-Range: ${euro(r.lo)} – ${euro(r.hi)}* (ca. ${r.m2} m²)`, '', 'Meine Angaben:'];
+    const lines = ['Hallo RESCH|Bau, ich interessiere mich für einen Neubau.', '', 'Meine Angaben:'];
     QUESTIONS.forEach(q => { let v = answers[q.key]; if (Array.isArray(v)) v = v.length ? v.join(', ') : '-'; lines.push(`• ${q.key}: ${v||'-'}`); });
     if (answers._m2exact) lines.push(`• Exakte Wohnfläche: ${answers._m2exact} m²`);
     if (kontakt.name) lines.push('', `• Name: ${kontakt.name}`);
-    lines.push('', 'Bitte meldet euch für ein persönliches Planungsgespräch. Danke!');
+    lines.push('', 'Bitte schickt mir meine grobe Preisrange und meldet euch für ein persönliches Gespräch. Danke!');
     window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(lines.join('\n'))}`, '_blank');
   }
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeFunnel(); });
+
+  renderBody();
 </script>
 </body>
 </html>
