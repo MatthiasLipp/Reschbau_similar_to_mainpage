@@ -4,223 +4,152 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>RESCH|Bau – Baukosten-Check | Was kostet Ihr Neubau ungefähr?</title>
-<meta name="description" content="Baukosten-Check von RESCH|Bau: Beantworten Sie 10 kurze Fragen zu Ihrem Neubau und erhalten Sie die grobe Preisrange per WhatsApp. Kostenlos & unverbindlich." />
+<meta name="description" content="Baukosten-Check von RESCH|Bau: Beantworten Sie ein paar kurze Fragen und erhalten Sie Ihre grobe Preisrange sofort per WhatsApp." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
 <style>
-  :root {
-    --red:    #cf2027;
-    --red-dk: #b51a20;
-    --black:  #161616;
-    --ink:    #2b2b2b;
-    --muted:  #6c6c6c;
-    --box:    #ededed;
-    --line:   #d9d9d9;
-    --white:  #ffffff;
-  }
-  * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body {
-    margin: 0;
-    font-family: 'Open Sans', Arial, Helvetica, sans-serif;
-    color: var(--ink);
-    background: var(--white);
-    line-height: 1.65;
-    -webkit-font-smoothing: antialiased;
-  }
-  a { color: inherit; text-decoration: none; }
-  .wrap { width: min(1140px, 92vw); margin-inline: auto; }
+  :root { --red:#cf2027; --red-dk:#b51a20; --black:#161616; --ink:#2b2b2b; --muted:#6c6c6c; --box:#ededed; --line:#d9d9d9; --white:#ffffff; }
+  * { box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { margin:0; font-family:'Open Sans',Arial,Helvetica,sans-serif; color:var(--ink); background:var(--white); line-height:1.65; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; text-decoration:none; }
+  .wrap { width:min(1140px,92vw); margin-inline:auto; }
 
-  /* ---------- Top nav ---------- */
-  .topbar { padding: 1.6rem 0 .4rem; }
-  .mainnav { display: flex; gap: clamp(.9rem, 3vw, 2.6rem); justify-content: center; flex-wrap: wrap; }
-  .mainnav a {
-    text-transform: uppercase; letter-spacing: .14em; font-size: .9rem; font-weight: 600; color: #1a1a1a;
-    padding-top: .7rem; border-top: 2px solid #cfcfcf; transition: border-color .15s, color .15s;
-  }
-  .mainnav a:hover, .mainnav a.active { border-top-color: var(--black); }
+  .topbar { padding:1.6rem 0 .4rem; }
+  .mainnav { display:flex; gap:clamp(.9rem,3vw,2.6rem); justify-content:center; flex-wrap:wrap; }
+  .mainnav a { text-transform:uppercase; letter-spacing:.14em; font-size:.9rem; font-weight:600; color:#1a1a1a; padding-top:.7rem; border-top:2px solid #cfcfcf; transition:border-color .15s, color .15s; }
+  .mainnav a:hover, .mainnav a.active { border-top-color:var(--black); }
 
-  /* ---------- Logo ---------- */
-  .brand { text-align: center; padding: 1.4rem 0 .6rem; }
-  .logo {
-    display: inline-flex; align-items: center; background: var(--black); color: #fff;
-    font-weight: 800; font-size: clamp(2rem, 5.5vw, 3.1rem); line-height: 1;
-    padding: .3em .55em .3em .28em; border-radius: .42em; letter-spacing: .005em;
-  }
-  .logo-r {
-    display: inline-grid; place-items: center; width: 1.4em; height: 1.4em; border-radius: 50%;
-    background: var(--black); border: .055em solid #3c3c3c; color: var(--red); font-weight: 800;
-    margin-right: .08em; box-shadow: 0 0 0 .03em #000 inset;
-  }
-  .logo-bar { width: .055em; height: .95em; background: #fff; margin: 0 .28em; opacity: .9; }
-  .logo-bau { position: relative; padding-right: .05em; }
-  .logo-roof {
-    position: absolute; top: -.5em; right: -.18em; background: var(--red); color: #fff;
-    font-size: .26em; font-weight: 700; padding: .12em .42em; border-radius: .28em; letter-spacing: .04em;
-  }
-  .logo-roof::before {
-    content: ""; position: absolute; top: -.42em; left: 50%; transform: translateX(-50%);
-    border-left: .5em solid transparent; border-right: .5em solid transparent; border-bottom: .45em solid var(--red);
-  }
-  .brand-tag {
-    margin-top: .7rem; text-transform: uppercase; letter-spacing: .42em; font-weight: 700;
-    font-size: clamp(.7rem, 1.6vw, .95rem); color: #3a3a3a; padding-left: .42em;
-  }
+  .brand { text-align:center; padding:1.4rem 0 .6rem; }
+  .logo { display:inline-flex; align-items:center; background:var(--black); color:#fff; font-weight:800; font-size:clamp(2rem,5.5vw,3.1rem); line-height:1; padding:.3em .55em .3em .28em; border-radius:.42em; letter-spacing:.005em; }
+  .logo-r { display:inline-grid; place-items:center; width:1.4em; height:1.4em; border-radius:50%; background:var(--black); border:.055em solid #3c3c3c; color:var(--red); font-weight:800; margin-right:.08em; box-shadow:0 0 0 .03em #000 inset; }
+  .logo-bar { width:.055em; height:.95em; background:#fff; margin:0 .28em; opacity:.9; }
+  .logo-bau { position:relative; padding-right:.05em; }
+  .logo-roof { position:absolute; top:-.5em; right:-.18em; background:var(--red); color:#fff; font-size:.26em; font-weight:700; padding:.12em .42em; border-radius:.28em; letter-spacing:.04em; }
+  .logo-roof::before { content:""; position:absolute; top:-.42em; left:50%; transform:translateX(-50%); border-left:.5em solid transparent; border-right:.5em solid transparent; border-bottom:.45em solid var(--red); }
+  .brand-tag { margin-top:.7rem; text-transform:uppercase; letter-spacing:.42em; font-weight:700; font-size:clamp(.7rem,1.6vw,.95rem); color:#3a3a3a; padding-left:.42em; }
 
-  /* ---------- Hero ---------- */
-  .hero { padding: 1.5rem 0 1rem; }
-  .headline {
-    font-size: clamp(1.8rem, 4.4vw, 2.7rem); font-weight: 800; color: var(--black);
-    margin: .4rem 0 1.6rem; letter-spacing: -.01em;
-  }
-  .headline .v { color: var(--red); }
+  .hero { padding:1.5rem 0 1rem; }
+  .headline { font-size:clamp(1.8rem,4.4vw,2.7rem); font-weight:800; color:var(--black); margin:.4rem 0 1.6rem; letter-spacing:-.01em; }
+  .headline .v { color:var(--red); }
+  .badge { display:inline-block; background:var(--black); color:#fff; font-weight:700; text-transform:uppercase; letter-spacing:.28em; font-size:.82rem; padding:.55rem 1.4rem; margin-bottom:1.1rem; }
+  .gbox { background:var(--box); padding:clamp(1.4rem,3vw,2.2rem); margin-bottom:1.4rem; }
+  .gbox p { margin:0 0 1.2rem; text-align:justify; color:#333; font-size:1.05rem; }
+  .gbox p:last-of-type { margin-bottom:0; }
+  .gbox .q { font-weight:800; color:var(--black); font-size:1.18rem; }
+  .gbox strong { color:var(--black); }
+  .btn-red { display:inline-flex; align-items:center; gap:.6rem; background:var(--red); color:#fff; font-weight:700; font-size:1.02rem; padding:.95rem 1.8rem; border:0; cursor:pointer; text-transform:uppercase; letter-spacing:.06em; transition:background .15s, transform .1s; }
+  .btn-red:hover { background:var(--red-dk); }
+  .btn-red:active { transform:translateY(1px); }
 
-  .badge {
-    display: inline-block; background: var(--black); color: #fff; font-weight: 700;
-    text-transform: uppercase; letter-spacing: .28em; font-size: .82rem;
-    padding: .55rem 1.4rem; margin-bottom: 1.1rem;
-  }
-  .gbox {
-    background: var(--box); padding: clamp(1.4rem, 3vw, 2.2rem); margin-bottom: 1.4rem;
-  }
-  .gbox p { margin: 0 0 1.2rem; text-align: justify; color: #333; font-size: 1.05rem; }
-  .gbox p:last-of-type { margin-bottom: 0; }
-  .gbox .q { font-weight: 800; color: var(--black); font-size: 1.18rem; }
-  .gbox strong { color: var(--black); }
+  section { padding:clamp(2rem,4vw,3rem) 0; }
+  .sec-title { font-size:clamp(1.5rem,3vw,2rem); font-weight:800; color:var(--black); margin:0 0 .3rem; }
+  .sec-sub { color:var(--muted); margin:0 0 1.8rem; font-size:1.05rem; }
 
-  .btn-red {
-    display: inline-flex; align-items: center; gap: .6rem; background: var(--red); color: #fff;
-    font-weight: 700; font-size: 1.02rem; padding: .95rem 1.8rem; border: 0; cursor: pointer;
-    text-transform: uppercase; letter-spacing: .06em; transition: background .15s, transform .1s;
-  }
-  .btn-red:hover { background: var(--red-dk); }
-  .btn-red:active { transform: translateY(1px); }
+  .cards { display:grid; grid-template-columns:repeat(3,1fr); gap:1.4rem; }
+  .card { border:1px solid #e4e4e4; background:#fff; display:flex; flex-direction:column; }
+  .card-top { background:var(--black); color:#fff; height:132px; display:grid; place-items:center; position:relative; }
+  .card-top .n { font-size:3.2rem; font-weight:800; color:var(--red); line-height:1; }
+  .card-top .lbl { position:absolute; bottom:12px; left:0; right:0; text-align:center; text-transform:uppercase; letter-spacing:.22em; font-size:.72rem; color:#cfcfcf; font-weight:600; }
+  .card-body { padding:1.5rem 1.5rem 1.7rem; }
+  .card-body h3 { font-size:1.22rem; font-weight:800; color:var(--black); margin:0 0 .6rem; }
+  .card-body p { margin:0; color:#4a4a4a; text-align:justify; font-size:.98rem; }
 
-  /* ---------- Sections ---------- */
-  section { padding: clamp(2rem, 4vw, 3rem) 0; }
-  .sec-title { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 800; color: var(--black); margin: 0 0 .3rem; }
-  .sec-sub { color: var(--muted); margin: 0 0 1.8rem; font-size: 1.05rem; }
+  .type-section { background:#f6f6f6; }
+  .type-bars { display:grid; grid-template-columns:1fr; gap:1.2rem; margin-top:1.4rem; }
+  .type-bar { background:var(--black); color:#fff; border:0; cursor:pointer; padding:1.6rem 1.2rem; font-family:inherit; font-weight:700; font-size:1.1rem; letter-spacing:.03em; display:flex; align-items:center; justify-content:center; gap:.7rem; transition:background .15s; }
+  .type-bar:hover { background:var(--red); }
+  .type-bar .arrow { color:var(--red); transition:color .15s; }
+  .type-bar:hover .arrow { color:#fff; }
 
-  /* Step cards */
-  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4rem; }
-  .card { border: 1px solid #e4e4e4; background: #fff; display: flex; flex-direction: column; }
-  .card-top { background: var(--black); color: #fff; height: 132px; display: grid; place-items: center; position: relative; }
-  .card-top .n { font-size: 3.2rem; font-weight: 800; color: var(--red); line-height: 1; }
-  .card-top .lbl {
-    position: absolute; bottom: 12px; left: 0; right: 0; text-align: center;
-    text-transform: uppercase; letter-spacing: .22em; font-size: .72rem; color: #cfcfcf; font-weight: 600;
-  }
-  .card-body { padding: 1.5rem 1.5rem 1.7rem; }
-  .card-body h3 { font-size: 1.22rem; font-weight: 800; color: var(--black); margin: 0 0 .6rem; }
-  .card-body p { margin: 0; color: #4a4a4a; text-align: justify; font-size: .98rem; }
+  .faq { max-width:860px; }
+  .qa { border-bottom:1px solid var(--line); }
+  .qa > button { width:100%; text-align:left; background:none; border:0; cursor:pointer; padding:1.25rem .2rem; display:flex; align-items:center; justify-content:space-between; gap:1.2rem; font-family:inherit; font-weight:700; font-size:1.08rem; color:var(--black); }
+  .qa .plus { flex:none; width:22px; height:22px; position:relative; }
+  .qa .plus::before, .qa .plus::after { content:""; position:absolute; background:var(--red); border-radius:1px; transition:transform .25s, opacity .25s; }
+  .qa .plus::before { top:10px; left:1px; right:1px; height:2.5px; }
+  .qa .plus::after { left:10px; top:1px; bottom:1px; width:2.5px; }
+  .qa.open .plus::after { transform:rotate(90deg); opacity:0; }
+  .qa .ans { max-height:0; overflow:hidden; transition:max-height .28s ease; }
+  .qa .ans p { margin:0 .2rem 1.3rem; color:#4a4a4a; font-size:1rem; text-align:justify; }
+  .qa.open .ans { max-height:220px; }
 
-  /* CTA bar */
-  .type-section { background: #f6f6f6; }
-  .type-bars { display: grid; grid-template-columns: 1fr; gap: 1.2rem; margin-top: 1.4rem; }
-  .type-bar {
-    background: var(--black); color: #fff; border: 0; cursor: pointer; padding: 1.6rem 1.2rem;
-    font-family: inherit; font-weight: 700; font-size: 1.1rem; letter-spacing: .03em;
-    display: flex; align-items: center; justify-content: center; gap: .7rem; transition: background .15s;
-  }
-  .type-bar:hover { background: var(--red); }
-  .type-bar .arrow { color: var(--red); transition: color .15s; }
-  .type-bar:hover .arrow { color: #fff; }
+  footer { border-top:1px solid var(--line); padding:2.4rem 0; text-align:center; }
+  footer .flogo { font-weight:800; color:var(--black); letter-spacing:.02em; }
+  footer .flogo .r { color:var(--red); }
+  footer .fcopy { color:var(--muted); font-size:.9rem; margin-top:.5rem; }
+  footer .freg { color:var(--muted); font-size:.88rem; margin-top:.2rem; }
 
-  /* FAQ */
-  .faq { max-width: 860px; }
-  .qa { border-bottom: 1px solid var(--line); }
-  .qa > button {
-    width: 100%; text-align: left; background: none; border: 0; cursor: pointer;
-    padding: 1.25rem .2rem; display: flex; align-items: center; justify-content: space-between; gap: 1.2rem;
-    font-family: inherit; font-weight: 700; font-size: 1.08rem; color: var(--black);
-  }
-  .qa .plus { flex: none; width: 22px; height: 22px; position: relative; }
-  .qa .plus::before, .qa .plus::after { content:""; position:absolute; background: var(--red); border-radius: 1px; transition: transform .25s, opacity .25s; }
-  .qa .plus::before { top: 10px; left: 1px; right: 1px; height: 2.5px; }
-  .qa .plus::after { left: 10px; top: 1px; bottom: 1px; width: 2.5px; }
-  .qa.open .plus::after { transform: rotate(90deg); opacity: 0; }
-  .qa .ans { max-height: 0; overflow: hidden; transition: max-height .28s ease; }
-  .qa .ans p { margin: 0 .2rem 1.3rem; color: #4a4a4a; font-size: 1rem; text-align: justify; }
-  .qa.open .ans { max-height: 220px; }
-
-  /* Footer */
-  footer { border-top: 1px solid var(--line); padding: 2.4rem 0; text-align: center; }
-  footer .flogo { font-weight: 800; color: var(--black); letter-spacing: .02em; }
-  footer .flogo .r { color: var(--red); }
-  footer .fcopy { color: var(--muted); font-size: .9rem; margin-top: .5rem; }
-  footer .freg { color: var(--muted); font-size: .88rem; margin-top: .2rem; }
-
-  /* ---------- Modal funnel ---------- */
-  .modal { position: fixed; inset: 0; z-index: 100; display: none; }
-  .modal.open { display: block; }
-  .modal-bg { position: absolute; inset: 0; background: rgba(0,0,0,.6); }
-  .modal-panel {
-    position: relative; background: #fff; width: min(600px, 94vw); margin: clamp(1rem,5vh,3rem) auto;
-    box-shadow: 0 30px 80px -20px rgba(0,0,0,.6); overflow: hidden; max-height: 90vh; display: flex; flex-direction: column;
-  }
-  .modal-head { padding: 1.3rem 1.6rem 1rem; background: var(--black); color: #fff; }
-  .modal-head .bar { height: 6px; background: #3a3a3a; overflow: hidden; margin-bottom: .9rem; }
-  .modal-head .bar i { display: block; height: 100%; background: var(--red); width: 10%; transition: width .3s; }
-  .modal-head .row { display: flex; align-items: center; justify-content: space-between; }
-  .modal-head .step-label { font-size: .8rem; font-weight: 600; color: #c9c9c9; letter-spacing: .04em; }
-  .modal-close { background: none; border: 0; font-size: 1.5rem; line-height: 1; cursor: pointer; color: #c9c9c9; padding: .2rem .4rem; }
-  .modal-body { padding: 1.6rem; overflow-y: auto; }
-  .modal-body.shake { animation: shake .3s; }
+  /* Modal funnel */
+  .modal { position:fixed; inset:0; z-index:100; display:none; }
+  .modal.open { display:block; }
+  .modal-bg { position:absolute; inset:0; background:rgba(0,0,0,.6); }
+  .modal-panel { position:relative; background:#fff; width:min(620px,94vw); margin:clamp(1rem,4vh,3rem) auto; box-shadow:0 30px 80px -20px rgba(0,0,0,.6); overflow:hidden; max-height:92vh; display:flex; flex-direction:column; }
+  .modal-head { padding:1.3rem 1.6rem 1rem; background:var(--black); color:#fff; }
+  .modal-head .bar { height:6px; background:#3a3a3a; overflow:hidden; margin-bottom:.9rem; }
+  .modal-head .bar i { display:block; height:100%; background:var(--red); width:6%; transition:width .3s; }
+  .modal-head .row { display:flex; align-items:center; justify-content:space-between; }
+  .modal-head .step-label { font-size:.8rem; font-weight:600; color:#c9c9c9; letter-spacing:.04em; }
+  .modal-close { background:none; border:0; font-size:1.5rem; line-height:1; cursor:pointer; color:#c9c9c9; padding:.2rem .4rem; }
+  .modal-body { padding:1.6rem; overflow-y:auto; }
+  .modal-body.shake { animation:shake .3s; }
   @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+  .qtitle { color:var(--black); font-size:1.25rem; margin:0 0 .35rem; font-weight:800; }
+  .qhint { color:var(--muted); margin:0 0 1.2rem; font-size:.95rem; }
 
-  .qtitle { color: var(--black); font-size: 1.25rem; margin: 0 0 .35rem; font-weight: 800; }
-  .qhint { color: var(--muted); margin: 0 0 1.2rem; font-size: .95rem; }
+  .qcard-grid { display:grid; gap:.7rem; }
+  .qcard-grid.c2 { grid-template-columns:1fr 1fr; }
+  .qcard-grid.c3 { grid-template-columns:1fr 1fr 1fr; }
+  @media (max-width:560px){ .qcard-grid.c2,.qcard-grid.c3{ grid-template-columns:1fr 1fr; } }
+  @media (max-width:380px){ .qcard-grid.c2,.qcard-grid.c3{ grid-template-columns:1fr; } }
+  .qcard { position:relative; display:flex; flex-direction:column; align-items:center; gap:.45rem; text-align:center; padding:.85rem .7rem; border:2px solid var(--line); background:#fff; cursor:pointer; transition:border-color .12s, box-shadow .12s, transform .1s; font:inherit; color:inherit; }
+  .qcard:hover { border-color:var(--red); transform:translateY(-2px); box-shadow:0 8px 20px -12px rgba(0,0,0,.35); }
+  .qcard.sel { border-color:var(--red); background:#fcecec; }
+  .qcard .media { width:100%; aspect-ratio:3/2; display:grid; place-items:center; background:rgba(207,32,39,.07); overflow:hidden; }
+  .qcard .media img { width:100%; height:100%; object-fit:cover; }
+  .qcard .media .emoji { font-size:2.3rem; line-height:1; }
+  .qcard .lab { font-weight:800; color:var(--black); font-size:.98rem; }
+  .qcard .sub { font-size:.78rem; color:var(--muted); line-height:1.25; }
+  .qcard .check { position:absolute; top:.5rem; right:.5rem; width:24px; height:24px; border-radius:50%; background:var(--red); color:#fff; display:none; align-items:center; justify-content:center; font-weight:800; font-size:.8rem; }
+  .qcard.sel .check { display:flex; }
 
-  /* option cards (image-ready) */
-  .qcard-grid { display: grid; gap: .7rem; }
-  .qcard-grid.c2 { grid-template-columns: 1fr 1fr; }
-  .qcard-grid.c3 { grid-template-columns: 1fr 1fr 1fr; }
-  @media (max-width: 560px) { .qcard-grid.c2, .qcard-grid.c3 { grid-template-columns: 1fr 1fr; } }
-  @media (max-width: 380px) { .qcard-grid.c2, .qcard-grid.c3 { grid-template-columns: 1fr; } }
-  .qcard {
-    position: relative; display: flex; flex-direction: column; align-items: center; gap: .45rem; text-align: center;
-    padding: .85rem .7rem; border: 2px solid var(--line); background: #fff; cursor: pointer;
-    transition: border-color .12s, box-shadow .12s, transform .1s; font: inherit; color: inherit;
-  }
-  .qcard:hover { border-color: var(--red); transform: translateY(-2px); box-shadow: 0 8px 20px -12px rgba(0,0,0,.35); }
-  .qcard.sel { border-color: var(--red); background: #fcecec; }
-  .qcard .media { width: 100%; aspect-ratio: 3 / 2; display: grid; place-items: center; background: rgba(207,32,39,.07); overflow: hidden; }
-  .qcard .media img { width: 100%; height: 100%; object-fit: cover; }
-  .qcard .media .emoji { font-size: 2.4rem; line-height: 1; }
-  .qcard .lab { font-weight: 800; color: var(--black); font-size: 1rem; }
-  .qcard .sub { font-size: .8rem; color: var(--muted); line-height: 1.25; }
-  .qcard .check {
-    position: absolute; top: .5rem; right: .5rem; width: 24px; height: 24px; border-radius: 50%;
-    background: var(--red); color: #fff; display: none; align-items: center; justify-content: center; font-weight: 800; font-size: .8rem;
-  }
-  .qcard.sel .check { display: flex; }
+  .qlist { display:grid; gap:.55rem; }
+  .qopt { display:flex; align-items:center; gap:.8rem; padding:.95rem 1.1rem; border:2px solid var(--line); background:#fff; cursor:pointer; font-weight:700; text-align:left; font:inherit; color:var(--black); transition:border-color .12s, background .12s; }
+  .qopt:hover { border-color:#b3b3b3; }
+  .qopt.sel { border-color:var(--red); background:#fcecec; }
+  .qopt .tick { width:20px; height:20px; border-radius:50%; border:2px solid var(--line); flex:none; display:grid; place-items:center; font-size:.7rem; color:#fff; }
+  .qopt.sel .tick { border-color:var(--red); background:var(--red); }
+  .qextra { margin-top:.8rem; }
+  .qextra input { width:100%; font:inherit; padding:.8rem 1rem; border:2px solid var(--line); background:#fff; }
+  .qextra input:focus { outline:2px solid rgba(207,32,39,.45); border-color:var(--red); }
 
-  .field { display: grid; gap: .4rem; margin-bottom: 1rem; }
-  .field label { font-weight: 700; font-size: .9rem; color: var(--black); }
-  .field input, .field textarea { font: inherit; padding: .85rem 1rem; border: 1.5px solid var(--line); background: #fff; width: 100%; }
-  .field input:focus, .field textarea:focus { outline: 2px solid rgba(207,32,39,.45); border-color: var(--red); }
-  .summary { background: var(--box); padding: .8rem 1.1rem; margin-bottom: 1.2rem; }
-  .summary div { display: flex; justify-content: space-between; gap: 1rem; padding: .3rem 0; font-size: .9rem; border-bottom: 1px dashed #cfcfcf; }
-  .summary div:last-child { border-bottom: 0; }
-  .summary span:first-child { color: var(--muted); }
-  .summary span:last-child { font-weight: 700; text-align: right; color: var(--black); }
-  .wa-note { display: flex; gap: .6rem; align-items: flex-start; background: #eef9f1; border: 1px solid #bfe6cc; padding: .9rem 1rem; font-size: .9rem; color: #1d4a2c; }
-  .modal-foot { padding: 1rem 1.6rem 1.4rem; border-top: 1px solid var(--line); display: flex; justify-content: space-between; gap: .8rem; }
-  .btn-ghost { background: #fff; color: var(--black); border: 1.5px solid var(--line); font-family: inherit; font-weight: 700; padding: .85rem 1.5rem; cursor: pointer; text-transform: uppercase; letter-spacing: .05em; font-size: .92rem; }
-  .btn-ghost:hover { border-color: #b3b3b3; }
+  .result { text-align:center; background:var(--black); color:#fff; padding:1.5rem 1rem; margin-bottom:1.2rem; }
+  .result .reb { font-size:.78rem; text-transform:uppercase; letter-spacing:.2em; color:var(--red); font-weight:700; }
+  .result .range { font-weight:800; font-size:clamp(1.7rem,5vw,2.3rem); margin:.4rem 0; }
+  .result .rnote { font-size:.82rem; color:rgba(255,255,255,.7); }
 
-  /* Responsive */
-  @media (max-width: 820px) {
-    .cards { grid-template-columns: 1fr; }
-  }
+  .field { display:grid; gap:.4rem; margin-bottom:1rem; }
+  .field label { font-weight:700; font-size:.9rem; color:var(--black); }
+  .field input { font:inherit; padding:.85rem 1rem; border:2px solid var(--line); background:#fff; width:100%; }
+  .field input:focus { outline:2px solid rgba(207,32,39,.45); border-color:var(--red); }
+  .summary { background:var(--box); padding:.8rem 1.1rem; margin-bottom:1.2rem; }
+  .summary div { display:flex; justify-content:space-between; gap:1rem; padding:.3rem 0; font-size:.9rem; border-bottom:1px dashed #cfcfcf; }
+  .summary div:last-child { border-bottom:0; }
+  .summary span:first-child { color:var(--muted); }
+  .summary span:last-child { font-weight:700; text-align:right; color:var(--black); }
+  .wa-note { display:flex; gap:.6rem; align-items:flex-start; background:#eef9f1; border:1px solid #bfe6cc; padding:.9rem 1rem; font-size:.88rem; color:#1d4a2c; }
+  .modal-foot { padding:1rem 1.6rem 1.4rem; border-top:1px solid var(--line); display:flex; justify-content:space-between; gap:.8rem; }
+  .btn-ghost { background:#fff; color:var(--black); border:2px solid var(--line); font-family:inherit; font-weight:700; padding:.85rem 1.5rem; cursor:pointer; text-transform:uppercase; letter-spacing:.05em; font-size:.92rem; }
+  .btn-ghost:hover { border-color:#b3b3b3; }
+
+  @media (max-width:820px){ .cards{ grid-template-columns:1fr; } }
 </style>
 </head>
 <body>
 
 <a id="top"></a>
 
-<!-- TOP NAV (onepager) -->
 <div class="topbar">
   <nav class="mainnav">
     <a href="#top" class="active">Home</a>
@@ -232,7 +161,6 @@
   </nav>
 </div>
 
-<!-- LOGO -->
 <div class="brand">
   <div class="logo" aria-label="RESCH Bau GmbH">
     <span class="logo-r">R</span><span>ESCH</span><span class="logo-bar"></span><span class="logo-bau"><span class="logo-roof">GmbH</span>BAU</span>
@@ -240,63 +168,38 @@
   <div class="brand-tag">Planungs- &amp; Bauunternehmen</div>
 </div>
 
-<!-- HERO -->
 <section class="hero">
   <div class="wrap">
     <h1 class="headline">Wir realisieren Ihre <span class="v">V</span>ision.</h1>
-
     <span class="badge">Baukosten-Check</span>
     <div class="gbox">
       <p class="q">Was kostet Ihr Neubau ungefähr?</p>
-      <p>Beantworten Sie 10 kurze Fragen zu Ihrem Bauvorhaben. <strong>RESCH|Bau</strong> prüft Ihre Angaben und sendet Ihnen die grobe Preisrange direkt per WhatsApp – schnell, kostenlos und völlig unverbindlich. So erhalten Sie für Ihren Neubau in <strong>Wien, Niederösterreich</strong> und dem <strong>Burgenland</strong> eine erste realistische Orientierung.</p>
+      <p>Beantworten Sie ein paar kurze Fragen zu Ihrem Bauvorhaben. <strong>RESCH|Bau</strong> berechnet daraus Ihre grobe Preisrange und sendet sie Ihnen direkt per WhatsApp – schnell, kostenlos und völlig unverbindlich. So erhalten Sie für Ihren Neubau in <strong>Wien, Niederösterreich</strong> und dem <strong>Burgenland</strong> eine erste realistische Orientierung.</p>
     </div>
     <button class="btn-red" onclick="openFunnel()">Jetzt Baukosten berechnen</button>
   </div>
 </section>
 
-<!-- ABLAUF -->
 <section id="ablauf">
   <div class="wrap">
     <h2 class="sec-title">So funktioniert der Baukosten-Check</h2>
-    <p class="sec-sub">In drei Schritten zur ersten Einschätzung.</p>
+    <p class="sec-sub">In drei Schritten zu Ihrer ersten Einschätzung.</p>
     <div class="cards">
-      <div class="card">
-        <div class="card-top"><span class="n">1</span><span class="lbl">Schritt 1</span></div>
-        <div class="card-body">
-          <h3>10 Fragen beantworten</h3>
-          <p>Beantworten Sie 10 kurze Fragen zu Ihrem Neubau – in unter 2 Minuten.</p>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-top"><span class="n">2</span><span class="lbl">Schritt 2</span></div>
-        <div class="card-body">
-          <h3>RESCH|Bau prüft Ihr Projekt</h3>
-          <p>Unser Team sichtet Ihre Angaben und berechnet eine realistische erste Einschätzung.</p>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-top"><span class="n">3</span><span class="lbl">Schritt 3</span></div>
-        <div class="card-body">
-          <h3>Range per WhatsApp erhalten</h3>
-          <p>Sie erhalten Ihre grobe Preisrange direkt per WhatsApp – schnell und unkompliziert.</p>
-        </div>
-      </div>
+      <div class="card"><div class="card-top"><span class="n">1</span><span class="lbl">Schritt 1</span></div><div class="card-body"><h3>Angaben ausfüllen</h3><p>Beantworten Sie ein paar kurze Fragen zu Ihrem Neubau – in 1–2 Minuten.</p></div></div>
+      <div class="card"><div class="card-top"><span class="n">2</span><span class="lbl">Schritt 2</span></div><div class="card-body"><h3>Range sofort per WhatsApp</h3><p>Ihre grobe Preisrange wird automatisch berechnet und kommt direkt per WhatsApp.</p></div></div>
+      <div class="card"><div class="card-top"><span class="n">3</span><span class="lbl">Schritt 3</span></div><div class="card-body"><h3>Persönliches Planungsgespräch</h3><p>Für die genaue Planung und Detailfragen melden wir uns telefonisch bei Ihnen.</p></div></div>
     </div>
   </div>
 </section>
 
-<!-- CTA -->
 <section class="type-section" id="projekt-check">
   <div class="wrap">
     <h2 class="sec-title">Berechnen Sie Ihre Baukosten</h2>
-    <p class="sec-sub">10 kurze Fragen zu Ihrem Neubau – die grobe Preisrange kommt direkt per WhatsApp.</p>
-    <div class="type-bars">
-      <button class="type-bar" onclick="openFunnel()">Jetzt Baukosten berechnen <span class="arrow">›</span></button>
-    </div>
+    <p class="sec-sub">Ein paar kurze Fragen zu Ihrem Neubau – die grobe Preisrange kommt sofort per WhatsApp.</p>
+    <div class="type-bars"><button class="type-bar" onclick="openFunnel()">Jetzt Baukosten berechnen <span class="arrow">›</span></button></div>
   </div>
 </section>
 
-<!-- FAQ -->
 <section id="faq">
   <div class="wrap">
     <h2 class="sec-title">Häufige Fragen</h2>
@@ -313,16 +216,12 @@
   </div>
 </footer>
 
-<!-- MODAL FUNNEL -->
 <div class="modal" id="checkModal" aria-hidden="true">
   <div class="modal-bg" onclick="closeFunnel()"></div>
   <div class="modal-panel" role="dialog" aria-modal="true" aria-label="Baukosten-Check">
     <div class="modal-head">
       <div class="bar"><i id="progBar"></i></div>
-      <div class="row">
-        <span class="step-label" id="stepLabel">Schritt 1 von 10</span>
-        <button class="modal-close" aria-label="Schließen" onclick="closeFunnel()">&times;</button>
-      </div>
+      <div class="row"><span class="step-label" id="stepLabel">Schritt 1 von 16</span><button class="modal-close" aria-label="Schließen" onclick="closeFunnel()">&times;</button></div>
     </div>
     <div class="modal-body" id="qBody"></div>
     <div class="modal-foot">
@@ -333,199 +232,187 @@
 </div>
 
 <script>
-  /* ===== FAQ ===== */
   const faqs = [
     ["Ist der Baukosten-Check kostenlos?", "Ja, der Baukosten-Check ist vollständig kostenlos und unverbindlich."],
-    ["Wie genau ist die Preisrange?", "Die Range ist eine erste Orientierung auf Basis Ihrer Angaben."],
+    ["Wie genau ist die Preisrange?", "Die Range wird automatisch aus Ihren Angaben berechnet und ist eine erste grobe Orientierung."],
     ["Warum erhalte ich die Range per WhatsApp?", "WhatsApp ermöglicht eine schnelle, direkte Kommunikation."],
     ["In welchen Regionen ist RESCH|Bau tätig?", "RESCH|Bau ist hauptsächlich in Wien, Niederösterreich und dem Burgenland tätig."],
     ["Was passiert mit meinen Daten?", "Ihre Daten werden ausschließlich zur Bearbeitung Ihrer Anfrage verwendet."],
-    ["Wie lange dauert der Baukosten-Check?", "Die 10 kurzen Fragen sind in unter 2 Minuten beantwortet."]
+    ["Wie geht es nach der Schätzung weiter?", "Für die genaue Planung und Detailfragen melden wir uns persönlich und telefonisch bei Ihnen."]
   ];
   const faqList = document.getElementById('faqList');
   faqs.forEach(([q, a]) => {
-    const row = document.createElement('div');
-    row.className = 'qa';
+    const row = document.createElement('div'); row.className = 'qa';
     row.innerHTML = `<button type="button"><span>${q}</span><span class="plus"></span></button><div class="ans"><p>${a}</p></div>`;
     row.querySelector('button').addEventListener('click', () => row.classList.toggle('open'));
     faqList.appendChild(row);
   });
 
-  /* ===== Baukosten-Funnel (10 Fragen → WhatsApp) ===== */
-  const WA_NUMBER = '436765409552';   // RESCH|Bau WhatsApp
-  const USE_IMAGES = false;           // auf true setzen, sobald Bilder unter images/… liegen
+  /* ===== Baukosten-Funnel (16 Fragen + Live-Berechnung → WhatsApp) ===== */
+  const WA_NUMBER = '436765409552';
+  const USE_IMAGES = false;
+
+  const PREISE_M2 = { 'Wien':[3300,4000,5300], 'Niederösterreich':[2900,3600,4300], 'Burgenland':[2600,3200,3700], 'Außerhalb dieser Region':[2900,3600,4300] };
+  const F_KELLER = { 'Kein Keller':1.0, 'Teilunterkellert':1.08, 'Vollunterkellert':1.15 };
+  const F_DACHGESCHOSS = 1.2;
+  const GARAGE_M2 = [1200, 1800];
 
   const QUESTIONS = [
-    { key:'Gebäudetyp', title:'Was möchten Sie bauen?', type:'single', cols:2, opts:[
-      {v:'Einfamilienhaus', l:'Einfamilienhaus', s:'Freistehend mit eigenem Garten', e:'🏠', img:'images/gebaeudetyp/einfamilienhaus.jpg'},
-      {v:'Doppelhaushälfte', l:'Doppelhaushälfte', s:'Geteilte Wand, eigener Eingang', e:'🏘️', img:'images/gebaeudetyp/doppelhaushaelfte.jpg'},
-      {v:'Reihenhaus', l:'Reihenhaus', s:'Kompakt und flächeneffizient', e:'🏘️', img:'images/gebaeudetyp/reihenhaus.jpg'},
-      {v:'Mehrfamilienhaus', l:'Mehrfamilienhaus', s:'Mehrere Wohneinheiten', e:'🏢', img:'images/gebaeudetyp/mehrfamilienhaus.jpg'},
-    ]},
-    { key:'Wohnfläche', title:'Wie groß soll die Wohnfläche sein?', type:'single', cols:2, opts:[
-      {v:'Kompakt (80–120 m²)', l:'Kompakt', s:'80 – 120 m²', e:'📐', img:'images/flaeche/kompakt.jpg'},
-      {v:'Mittel (120–160 m²)', l:'Mittel', s:'120 – 160 m²', e:'📐', img:'images/flaeche/mittel.jpg'},
-      {v:'Groß (160–220 m²)', l:'Groß', s:'160 – 220 m²', e:'📐', img:'images/flaeche/gross.jpg'},
-      {v:'Sehr groß (220+ m²)', l:'Sehr groß', s:'220+ m²', e:'📐', img:'images/flaeche/sehrgross.jpg'},
-    ]},
-    { key:'Geschosse', title:'Wie viele Stockwerke soll das Gebäude haben?', type:'single', cols:3, opts:[
-      {v:'Bungalow (1 Geschoss)', l:'Bungalow', s:'1 Geschoss', e:'🏠', img:'images/geschosse/bungalow.jpg'},
-      {v:'2 Geschosse', l:'2 Geschosse', s:'Standard', e:'🏠', img:'images/geschosse/zwei.jpg'},
-      {v:'3 Geschosse', l:'3 Geschosse', s:'Mehr Wohnraum auf kleiner Fläche', e:'🏢', img:'images/geschosse/drei.jpg'},
-    ]},
-    { key:'Keller', title:'Wünschen Sie einen Keller?', type:'single', cols:3, opts:[
-      {v:'Kein Keller', l:'Kein Keller', s:'Bodenplatte', e:'⬜', img:'images/keller/kein.jpg'},
-      {v:'Teilunterkellert', l:'Teilunterkellert', s:'Teilweise Kellerräume', e:'🔲', img:'images/keller/teil.jpg'},
-      {v:'Vollunterkellert', l:'Vollunterkellert', s:'Komplettes Kellergeschoss', e:'⬛', img:'images/keller/voll.jpg'},
-    ]},
-    { key:'Dachform', title:'Welche Dachform bevorzugen Sie?', type:'single', cols:2, opts:[
-      {v:'Flachdach', l:'Flachdach', s:'Modern und minimalistisch', e:'⏤', img:'images/dach/flachdach.jpg'},
-      {v:'Satteldach', l:'Satteldach', s:'Der Klassiker', e:'⛺', img:'images/dach/satteldach.jpg'},
-      {v:'Walmdach', l:'Walmdach', s:'Allseitig geneigt', e:'🏔️', img:'images/dach/walmdach.jpg'},
-      {v:'Pultdach', l:'Pultdach', s:'Einseitig geneigt', e:'📐', img:'images/dach/pultdach.jpg'},
-    ]},
-    { key:'Bauweise', title:'Welche Bauweise bevorzugen Sie?', type:'single', cols:3, opts:[
+    { key:'Bauvorhaben', title:'Was möchten Sie bauen?', layout:'img', type:'single', cols:2, opts:[
+      {v:'Einfamilienhaus', l:'Einfamilienhaus', e:'🏠', img:'images/bauvorhaben/einfamilienhaus.jpg'},
+      {v:'Mehrfamilienhaus', l:'Mehrfamilienhaus', e:'🏢', img:'images/bauvorhaben/mehrfamilienhaus.jpg'},
+      {v:'Zubau', l:'Zubau', e:'🧱', img:'images/bauvorhaben/zubau.jpg'},
+      {v:'Garage', l:'Garage', e:'🚗', img:'images/bauvorhaben/garage.jpg'} ]},
+    { key:'Wohnfläche', title:'Wie groß soll die Wohnfläche sein?', layout:'img', type:'single', cols:3, exactM2:true, opts:[
+      {v:'80–120 m²', l:'80–120 m²', e:'📐', img:'images/flaeche/klein.jpg'},
+      {v:'120–160 m²', l:'120–160 m²', e:'📐', img:'images/flaeche/mittel.jpg'},
+      {v:'über 160 m²', l:'über 160 m²', e:'📐', img:'images/flaeche/gross.jpg'} ]},
+    { key:'Keller', title:'Wünschen Sie einen Keller?', layout:'img', type:'single', cols:3, opts:[
+      {v:'Kein Keller', l:'Kein Keller', e:'⬜', img:'images/keller/kein.jpg'},
+      {v:'Teilunterkellert', l:'Teilunterkellert', e:'🔲', img:'images/keller/teil.jpg'},
+      {v:'Vollunterkellert', l:'Vollunterkellert', e:'⬛', img:'images/keller/voll.jpg'} ]},
+    { key:'Stockwerke', title:'Wie viele oberirdische Stockwerke soll das Gebäude haben?', layout:'img', type:'single', cols:3, opts:[
+      {v:'1 Geschoss / Bungalow', l:'1 Geschoss', s:'Bungalow', e:'🏠', img:'images/geschosse/eins.jpg'},
+      {v:'2 Geschosse', l:'2 Geschosse', e:'🏠', img:'images/geschosse/zwei.jpg'},
+      {v:'3 Geschosse', l:'3 Geschosse', e:'🏢', img:'images/geschosse/drei.jpg'} ]},
+    { key:'Dachgeschoss', title:'Ist ein Dachgeschoss geplant?', layout:'list', type:'single', opts:[
+      {v:'Nein', l:'Nein'}, {v:'Ja', l:'Ja'}, {v:'Noch offen', l:'Noch offen'} ]},
+    { key:'Dachform', title:'Welche Dachform bevorzugen Sie?', layout:'img', type:'single', cols:2, opts:[
+      {v:'Flachdach', l:'Flachdach', e:'⏤', img:'images/dach/flachdach.jpg'},
+      {v:'Satteldach', l:'Satteldach', e:'⛺', img:'images/dach/satteldach.jpg'},
+      {v:'Walmdach', l:'Walmdach', e:'🏔️', img:'images/dach/walmdach.jpg'},
+      {v:'Pultdach', l:'Pultdach', e:'📐', img:'images/dach/pultdach.jpg'} ]},
+    { key:'Bauweise', title:'Welche Bauweise bevorzugen Sie?', layout:'img', type:'single', cols:3, opts:[
       {v:'Massivbau', l:'Massivbau', s:'Ziegel / Beton', e:'🧱', img:'images/bauweise/massiv.jpg'},
-      {v:'Holzbau', l:'Holzbau', s:'Holzriegelbau', e:'🪵', img:'images/bauweise/holz.jpg'},
-      {v:'Fertigteilbau', l:'Fertigteilbau', s:'Vorgefertigte Elemente', e:'🏭', img:'images/bauweise/fertigteil.jpg'},
-    ]},
-    { key:'Ausstattung', title:'Welchen Ausstattungsstandard wünschen Sie?', type:'single', cols:3, opts:[
-      {v:'Standard', l:'Standard', s:'Bewährte Materialien, solide', e:'⭐', img:'images/ausstattung/standard.jpg'},
-      {v:'Gehoben', l:'Gehoben', s:'Hochwertige Böden, Markenprodukte', e:'✨', img:'images/ausstattung/gehoben.jpg'},
-      {v:'Premium', l:'Premium', s:'Top-Materialien, Smart-Home, Design', e:'💎', img:'images/ausstattung/premium.jpg'},
-    ]},
-    { key:'Energiestandard', title:'Welchen Energiestandard streben Sie an?', type:'single', cols:3, opts:[
-      {v:'Gesetzlicher Standard', l:'Gesetzl. Standard', s:'OIB-Mindestanforderungen', e:'🌡️', img:'images/energie/standard.jpg'},
-      {v:'Niedrigenergiehaus', l:'Niedrigenergie', s:'Bessere Dämmung, weniger Heizkosten', e:'🌿', img:'images/energie/niedrig.jpg'},
-      {v:'Passivhaus / Klimaaktiv', l:'Passivhaus', s:'Höchste Effizienz, max. Förderungen', e:'♻️', img:'images/energie/passiv.jpg'},
-    ]},
-    { key:'Heizsystem', title:'Welches Heizsystem planen Sie?', type:'single', cols:2, opts:[
-      {v:'Luft-Wärmepumpe', l:'Luft-Wärmepumpe', s:'Am häufigsten im Neubau', e:'💨', img:'images/heizung/lwp.jpg'},
-      {v:'Erd-Wärmepumpe', l:'Erd-Wärmepumpe', s:'Tiefenbohrung, sehr effizient', e:'🌍', img:'images/heizung/ewp.jpg'},
-      {v:'Pelletheizung', l:'Pelletheizung', s:'Nachwachsender Rohstoff', e:'🪵', img:'images/heizung/pellets.jpg'},
-      {v:'Fernwärme', l:'Fernwärme', s:'Günstige Installation, wenn verfügbar', e:'🏭', img:'images/heizung/fernwaerme.jpg'},
-      {v:'Gasheizung', l:'Gasheizung', s:'Auslaufmodell (EWG)', e:'🔥', img:'images/heizung/gas.jpg'},
-    ]},
-    { key:'Extras', title:'Welche Extras wünschen Sie?', type:'multi', cols:2, opts:[
-      {v:'Garage (gemauert)', l:'Garage', s:'Gemauert', e:'🚗', img:'images/extras/garage.jpg'},
-      {v:'Carport', l:'Carport', s:'', e:'🅿️', img:'images/extras/carport.jpg'},
-      {v:'Terrasse / Balkon', l:'Terrasse / Balkon', s:'', e:'☀️', img:'images/extras/terrasse.jpg'},
-      {v:'Photovoltaik', l:'Photovoltaik', s:'', e:'⚡', img:'images/extras/pv.jpg'},
-      {v:'Smart-Home', l:'Smart-Home', s:'', e:'📱', img:'images/extras/smarthome.jpg'},
-      {v:'Gartengestaltung', l:'Gartengestaltung', s:'', e:'🌳', img:'images/extras/garten.jpg'},
-      {v:'Keine Extras', l:'Keine Extras', s:'', e:'✖️'},
-    ]},
+      {v:'Holzbau / Holzriegelbau', l:'Holzbau', s:'Holzriegelbau', e:'🪵', img:'images/bauweise/holz.jpg'},
+      {v:'Fertigteilbau', l:'Fertigteilbau', s:'Vorgefertigt', e:'🏭', img:'images/bauweise/fertigteil.jpg'} ]},
+    { key:'Leistungsumfang', title:'Welcher Leistungsumfang soll kalkuliert werden?', layout:'list', type:'single', opts:[
+      {v:'Belagsfertig', l:'Belagsfertig'},
+      {v:'Schlüsselfertig standardisierte Innenausstattung', l:'Schlüsselfertig (standardisierte Innenausstattung)'} ]},
+    { key:'Extras', title:'Welche Extras wünschen Sie?', layout:'img', type:'multi', cols:2, opts:[
+      {v:'Garage', l:'Garage', e:'🚗', img:'images/extras/garage.jpg'},
+      {v:'Carport', l:'Carport', e:'🅿️', img:'images/extras/carport.jpg'},
+      {v:'Terrasse / Balkon', l:'Terrasse / Balkon', e:'☀️', img:'images/extras/terrasse.jpg'},
+      {v:'Photovoltaik', l:'Photovoltaik', e:'⚡', img:'images/extras/pv.jpg'},
+      {v:'Smart Home', l:'Smart Home', e:'📱', img:'images/extras/smarthome.jpg'},
+      {v:'Gartengestaltung', l:'Gartengestaltung', e:'🌳', img:'images/extras/garten.jpg'},
+      {v:'Gartenzaun', l:'Gartenzaun', e:'🚧', img:'images/extras/zaun.jpg'},
+      {v:'Pool', l:'Pool', e:'🏊', img:'images/extras/pool.jpg'},
+      {v:'Keine Extras', l:'Keine Extras', e:'✖️'} ]},
+    { key:'Region', title:'Wo soll Ihr Neubauprojekt entstehen?', layout:'list', type:'single', opts:[
+      {v:'Wien', l:'Wien'}, {v:'Niederösterreich', l:'Niederösterreich'}, {v:'Burgenland', l:'Burgenland'}, {v:'Außerhalb dieser Region', l:'Außerhalb dieser Region'} ]},
+    { key:'Grundstück', title:'Gibt es bereits ein Grundstück für Ihr Projekt?', layout:'list', type:'single', opts:[
+      {v:'Ja', l:'Ja'}, {v:'Nein', l:'Nein'}, {v:'In Abklärung', l:'In Abklärung'} ]},
+    { key:'Projektstand', title:'Wie weit ist Ihr Projekt aktuell?', layout:'list', type:'single', opts:[
+      {v:'Erste Idee', l:'Erste Idee'}, {v:'Erste Skizzen vorhanden', l:'Erste Skizzen vorhanden'}, {v:'Grundriss vorhanden', l:'Grundriss vorhanden'}, {v:'Bereits mit Planer gesprochen', l:'Bereits mit Planer gesprochen'}, {v:'Planung / Einreichung in Vorbereitung', l:'Planung / Einreichung in Vorbereitung'} ]},
+    { key:'Start', title:'Wann möchten Sie mit Ihrem Projekt starten?', layout:'list', type:'single', opts:[
+      {v:'Sofort / in den nächsten 3 Monaten', l:'Sofort / in den nächsten 3 Monaten'}, {v:'In 3–6 Monaten', l:'In 3–6 Monaten'}, {v:'In 6–12 Monaten', l:'In 6–12 Monaten'}, {v:'Später / noch offen', l:'Später / noch offen'} ]},
+    { key:'Budget', title:'Welcher Budgetrahmen ist grob vorgesehen?', layout:'list', type:'single', opts:[
+      {v:'Unter 250.000 €', l:'Unter 250.000 €'}, {v:'250.000–400.000 €', l:'250.000–400.000 €'}, {v:'400.000–600.000 €', l:'400.000–600.000 €'}, {v:'600.000 €+', l:'600.000 €+'}, {v:'Noch offen', l:'Noch offen'} ]},
+    { key:'Nächster Schritt', title:'Was ist Ihr gewünschter nächster Schritt?', layout:'list', type:'single', opts:[
+      {v:'Nur eine erste Kostenschätzung', l:'Ich möchte nur eine erste Kostenschätzung'}, {v:'Unverbindliches Erstgespräch', l:'Ich möchte ein unverbindliches Erstgespräch'}, {v:'Planungsgespräch', l:'Ich möchte ein Planungsgespräch'}, {v:'Projekt vorprüfen lassen', l:'Ich möchte mein Projekt vorprüfen lassen'}, {v:'Planung + spätere Ausführung', l:'Planung + spätere Ausführung'} ]},
+    { key:'Unterlagen', title:'Gibt es bereits Unterlagen oder Skizzen?', layout:'list', type:'multi', opts:[
+      {v:'Handskizze vorhanden', l:'Handskizze vorhanden'}, {v:'Grundriss vorhanden', l:'Grundriss vorhanden'}, {v:'Lageplan vorhanden', l:'Lageplan vorhanden'}, {v:'Inspirationsbilder vorhanden', l:'Inspirationsbilder vorhanden'}, {v:'Noch keine Unterlagen', l:'Noch keine Unterlagen'} ]},
   ];
 
-  const answers = {};
-  const kontakt = { name:'', phone:'', note:'' };
-  let i = 0;
-  const modal = document.getElementById('checkModal');
-  const qBody = document.getElementById('qBody');
+  const answers = {}; const kontakt = { name:'' }; let i = 0;
+  const modal = document.getElementById('checkModal'); const qBody = document.getElementById('qBody');
 
-  function openFunnel() {
-    i = 0; renderBody();
-    modal.classList.add('open'); modal.setAttribute('aria-hidden','false');
-    document.body.style.overflow = 'hidden';
+  function getM2() {
+    if (answers._m2exact && +answers._m2exact > 0) return +answers._m2exact;
+    const f = answers['Wohnfläche'] || '';
+    if (f.indexOf('80–120') === 0) return 100;
+    if (f.indexOf('120–160') === 0) return 140;
+    if (f.indexOf('über 160') === 0) return 190;
+    return 140;
   }
-  function closeFunnel() {
-    modal.classList.remove('open'); modal.setAttribute('aria-hidden','true');
-    document.body.style.overflow = '';
+  function round5000(n){ return Math.round(n/5000)*5000; }
+  function berechneRange() {
+    const m2 = getM2(); const region = answers['Region'] || 'Außerhalb dieser Region';
+    if (answers['Bauvorhaben'] === 'Garage') return { lo: round5000(GARAGE_M2[0]*m2), hi: round5000(GARAGE_M2[1]*m2), m2 };
+    const t = PREISE_M2[region] || PREISE_M2['Außerhalb dieser Region'];
+    const schluessel = (answers['Leistungsumfang'] || '').indexOf('Schlüsselfertig') === 0;
+    let lo = (schluessel ? t[1] : t[0]) * m2; let hi = (schluessel ? t[2] : t[1]) * m2;
+    const kf = F_KELLER[answers['Keller']] || 1.0; lo *= kf; hi *= kf;
+    if (answers['Dachgeschoss'] === 'Ja' && answers['Dachform'] !== 'Flachdach') { lo *= F_DACHGESCHOSS; hi *= F_DACHGESCHOSS; }
+    return { lo: round5000(lo), hi: round5000(hi), m2 };
   }
+  const euro = n => '€ ' + Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 
-  function cardHTML(q, o) {
-    const isSel = q.type === 'multi' ? (answers[q.key]||[]).includes(o.v) : answers[q.key] === o.v;
-    const media = (USE_IMAGES && o.img)
-      ? `<img src="${o.img}" alt="" onerror="this.outerHTML='<span class=&quot;emoji&quot;>${o.e||'•'}</span>'">`
-      : `<span class="emoji">${o.e || '•'}</span>`;
-    return `<button type="button" class="qcard${isSel?' sel':''}" data-v="${o.v}">
-      <span class="check">✓</span>
-      <span class="media">${media}</span>
-      <span class="lab">${o.l}</span>
-      ${o.s ? `<span class="sub">${o.s}</span>` : ''}
-    </button>`;
-  }
+  function openFunnel(){ i=0; renderBody(); modal.classList.add('open'); modal.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; }
+  function closeFunnel(){ modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
 
-  function renderBody() {
+  function cardHTML(q,o){
+    const isSel = q.type==='multi' ? (answers[q.key]||[]).includes(o.v) : answers[q.key]===o.v;
+    const media = (USE_IMAGES && o.img) ? `<img src="${o.img}" alt="" onerror="this.outerHTML='<span class=&quot;emoji&quot;>${o.e||'•'}</span>'">` : `<span class="emoji">${o.e||'•'}</span>`;
+    return `<button type="button" class="qcard${isSel?' sel':''}" data-v="${o.v}"><span class="check">✓</span><span class="media">${media}</span><span class="lab">${o.l}</span>${o.s?`<span class="sub">${o.s}</span>`:''}</button>`;
+  }
+  function listHTML(q,o){
+    const isSel = q.type==='multi' ? (answers[q.key]||[]).includes(o.v) : answers[q.key]===o.v;
+    return `<button type="button" class="qopt${isSel?' sel':''}" data-v="${o.v}"><span class="tick">${isSel?'✓':''}</span><span>${o.l}</span></button>`;
+  }
+  function renderBody(){
     if (i < QUESTIONS.length) {
       const q = QUESTIONS[i];
-      const hint = q.type === 'multi' ? 'Mehrfachauswahl möglich.' : 'Eine Auswahl genügt.';
-      qBody.innerHTML = `<h3 class="qtitle">${q.title}</h3><p class="qhint">${hint}</p>
-        <div class="qcard-grid c${q.cols}">${q.opts.map(o => cardHTML(q, o)).join('')}</div>`;
+      const hint = q.type==='multi' ? 'Mehrfachauswahl möglich.' : 'Eine Auswahl genügt.';
+      const body = q.layout==='img' ? `<div class="qcard-grid c${q.cols}">${q.opts.map(o=>cardHTML(q,o)).join('')}</div>` : `<div class="qlist">${q.opts.map(o=>listHTML(q,o)).join('')}</div>`;
+      const extra = q.exactM2 ? `<div class="qextra"><input id="m2exact" type="number" min="20" placeholder="Exakte Wohnfläche in m² (optional)" value="${answers._m2exact||''}"></div>` : '';
+      qBody.innerHTML = `<h3 class="qtitle">${q.title}</h3><p class="qhint">${hint}</p>${body}${extra}`;
     } else {
-      const rows = QUESTIONS.map(q => {
-        let v = answers[q.key]; if (Array.isArray(v)) v = v.length ? v.join(', ') : '–';
-        return `<div><span>${q.key}</span><span>${v || '–'}</span></div>`;
-      }).join('');
-      qBody.innerHTML = `<h3 class="qtitle">Fast geschafft!</h3>
-        <p class="qhint">Wohin dürfen wir Ihre grobe Preisrange senden? Sie erhalten sie per WhatsApp.</p>
+      const r = berechneRange();
+      const keys = ['Bauvorhaben','Wohnfläche','Keller','Dachform','Leistungsumfang','Region'];
+      const rows = keys.map(k => { let v = answers[k]; if (k==='Wohnfläche' && answers._m2exact) v = answers._m2exact + ' m²'; return `<div><span>${k}</span><span>${v||'–'}</span></div>`; }).join('');
+      const extras = (answers['Extras']||[]).filter(x=>x!=='Keine Extras');
+      qBody.innerHTML = `<div class="result"><div class="reb">Ihre grobe Baukosten-Range</div><div class="range">${euro(r.lo)} – ${euro(r.hi)}</div><div class="rnote">für ca. ${r.m2} m² · inkl. USt. · grobe Orientierung auf Basis Ihrer Angaben</div></div>
         <div class="field"><label for="qName">Name</label><input id="qName" type="text" placeholder="Vor- und Nachname" value="${kontakt.name}"></div>
-        <div class="field"><label for="qPhone">WhatsApp-Nummer (optional)</label><input id="qPhone" type="tel" placeholder="+43 …" value="${kontakt.phone}"></div>
-        <div class="field"><label for="qNote">Anmerkungen (optional)</label><textarea id="qNote" rows="2" placeholder="z. B. Grundstück, Zeitrahmen">${kontakt.note}</textarea></div>
-        <div class="summary">${rows}</div>
-        <div class="wa-note">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="#25d366"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2Z"/></svg>
-          <span>Mit dem Absenden öffnet sich WhatsApp mit Ihrer vorausgefüllten Anfrage. Ihre Daten werden ausschließlich zur Bearbeitung Ihrer Anfrage verwendet.</span>
-        </div>`;
+        <div class="summary">${rows}${extras.length?`<div><span>Extras</span><span>${extras.join(', ')}</span></div>`:''}</div>
+        <div class="wa-note"><svg width="20" height="20" viewBox="0 0 24 24" fill="#25d366"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2Z"/></svg><span>Mit „Per WhatsApp senden" schicken Sie uns Ihre Angaben. Für die genaue Planung melden wir uns persönlich und telefonisch bei Ihnen.</span></div>`;
     }
     updateChrome();
   }
-
-  function updateChrome() {
+  function updateChrome(){
     const total = QUESTIONS.length + 1;
-    document.getElementById('progBar').style.width = ((i + 1) / total * 100) + '%';
-    document.getElementById('stepLabel').textContent = i < QUESTIONS.length ? `Schritt ${i + 1} von ${QUESTIONS.length}` : 'Kontakt';
-    document.getElementById('backBtn').style.visibility = i === 0 ? 'hidden' : 'visible';
-    document.getElementById('nextBtn').textContent = i === QUESTIONS.length ? 'Per WhatsApp senden' : 'Weiter';
+    document.getElementById('progBar').style.width = ((i+1)/total*100) + '%';
+    document.getElementById('stepLabel').textContent = i < QUESTIONS.length ? `Schritt ${i+1} von ${QUESTIONS.length}` : 'Ihre Kostenschätzung';
+    document.getElementById('backBtn').style.visibility = i===0 ? 'hidden' : 'visible';
+    document.getElementById('nextBtn').textContent = i===QUESTIONS.length ? 'Per WhatsApp senden' : 'Weiter';
   }
-
   qBody.addEventListener('click', (e) => {
-    const card = e.target.closest('.qcard');
-    if (!card || i >= QUESTIONS.length) return;
-    const q = QUESTIONS[i];
-    const v = card.dataset.v;
-    if (q.type === 'multi') {
-      let arr = answers[q.key] || [];
-      if (v === 'Keine Extras') arr = arr.includes(v) ? [] : ['Keine Extras'];
-      else { arr = arr.filter(x => x !== 'Keine Extras'); arr = arr.includes(v) ? arr.filter(x => x !== v) : [...arr, v]; }
+    const el = e.target.closest('.qcard, .qopt'); if (!el || i>=QUESTIONS.length) return;
+    const q = QUESTIONS[i]; const v = el.dataset.v;
+    if (q.type==='multi') {
+      let arr = answers[q.key]||[]; const none = q.opts[q.opts.length-1].v;
+      if (v===none) arr = arr.includes(v) ? [] : [v];
+      else { arr = arr.filter(x=>x!==none); arr = arr.includes(v) ? arr.filter(x=>x!==v) : [...arr, v]; }
       answers[q.key] = arr;
-    } else {
-      answers[q.key] = v;
-    }
+    } else answers[q.key] = v;
     renderBody();
   });
-
-  function captureContact() {
-    const n = document.getElementById('qName'); if (n) kontakt.name = n.value.trim();
-    const p = document.getElementById('qPhone'); if (p) kontakt.phone = p.value.trim();
-    const t = document.getElementById('qNote'); if (t) kontakt.note = t.value.trim();
-  }
-  function shakeBody() { qBody.classList.remove('shake'); void qBody.offsetWidth; qBody.classList.add('shake'); }
-
-  function next() {
+  qBody.addEventListener('input', (e) => { if (e.target.id==='m2exact') answers._m2exact = e.target.value.trim(); });
+  function captureContact(){ const n=document.getElementById('qName'); if (n) kontakt.name = n.value.trim(); }
+  function shakeBody(){ qBody.classList.remove('shake'); void qBody.offsetWidth; qBody.classList.add('shake'); }
+  function next(){
     if (i < QUESTIONS.length) {
-      const q = QUESTIONS[i];
-      const sel = answers[q.key];
-      const ok = q.type === 'multi' ? (sel && sel.length) : !!sel;
+      const q = QUESTIONS[i]; const sel = answers[q.key];
+      let ok = q.type==='multi' ? (sel && sel.length) : !!sel;
+      if (q.exactM2 && answers._m2exact && +answers._m2exact > 0) ok = true;
       if (!ok) { shakeBody(); return; }
       i++; renderBody(); return;
     }
     captureContact();
-    if (!kontakt.name) { const n = document.getElementById('qName'); if (n) n.focus(); shakeBody(); return; }
+    if (!kontakt.name) { const n=document.getElementById('qName'); if (n) n.focus(); shakeBody(); return; }
     submit();
   }
-  function prev() { if (i > 0) { if (i === QUESTIONS.length) captureContact(); i--; renderBody(); } }
-
-  function submit() {
-    const lines = ['Hallo RESCH|Bau, ich interessiere mich für einen Neubau.', 'Meine Angaben aus dem Baukosten-Check:', ''];
-    QUESTIONS.forEach(q => { let v = answers[q.key]; if (Array.isArray(v)) v = v.join(', '); lines.push(`• ${q.key}: ${v || '-'}`); });
+  function prev(){ if (i>0) { if (i===QUESTIONS.length) captureContact(); i--; renderBody(); } }
+  function submit(){
+    const r = berechneRange();
+    const lines = ['Hallo RESCH|Bau, ich interessiere mich für einen Neubau.', '', `*Grobe Baukosten-Range: ${euro(r.lo)} – ${euro(r.hi)}* (ca. ${r.m2} m²)`, '', 'Meine Angaben:'];
+    QUESTIONS.forEach(q => { let v = answers[q.key]; if (Array.isArray(v)) v = v.length ? v.join(', ') : '-'; lines.push(`• ${q.key}: ${v||'-'}`); });
+    if (answers._m2exact) lines.push(`• Exakte Wohnfläche: ${answers._m2exact} m²`);
     if (kontakt.name) lines.push('', `• Name: ${kontakt.name}`);
-    if (kontakt.phone) lines.push(`• Telefon: ${kontakt.phone}`);
-    if (kontakt.note) lines.push(`• Anmerkung: ${kontakt.note}`);
-    lines.push('', 'Bitte senden Sie mir die grobe Preisrange. Danke!');
+    lines.push('', 'Bitte meldet euch für ein persönliches Planungsgespräch. Danke!');
     window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(lines.join('\n'))}`, '_blank');
   }
-
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeFunnel(); });
 </script>
 </body>
