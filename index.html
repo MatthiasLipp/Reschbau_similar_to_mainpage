@@ -263,9 +263,9 @@
 
   const pitched = () => answers['Dachform'] && answers['Dachform'] !== 'Flachdach';
 
-  const QUESTIONS = [
-    { key:'Vorhaben', title:'Was möchten Sie umsetzen?', layout:'img', type:'single', cols:2, opts:[
-      {v:'Neubau', l:'Neubau', e:'🏗️'}, {v:'Sanierung', l:'Sanierung', e:'🛠️'} ]},
+  const START_Q = { key:'Vorhaben', title:'Was möchten Sie umsetzen?', layout:'img', type:'single', cols:2, opts:[
+      {v:'Neubau', l:'Neubau', e:'🏗️'}, {v:'Sanierung', l:'Sanierung', e:'🛠️'} ]};
+  const NEUBAU_QS = [
     { key:'Bauvorhaben', title:'Was möchten Sie bauen?', layout:'img', type:'single', cols:2, opts:[
       {v:'Einfamilienhaus', l:'Einfamilienhaus', e:'🏠'}, {v:'Mehrfamilienhaus', l:'Mehrfamilienhaus', e:'🏢'}, {v:'Zubau', l:'Zubau', e:'🧱'}, {v:'Garage', l:'Garage', e:'🚗'} ]},
     { key:'Wohnfläche', title:'Wie groß soll die Wohnfläche sein?', layout:'list', type:'single', exactM2:true, opts:[
@@ -293,10 +293,30 @@
     { key:'Region', title:'Wo soll Ihr Neubauprojekt entstehen?', layout:'list', type:'single', plz:true, opts:[
       {v:'Wien', l:'Wien'}, {v:'Niederösterreich', l:'Niederösterreich'}, {v:'Burgenland', l:'Burgenland'}, {v:'Außerhalb dieser Region', l:'Außerhalb dieser Region'} ]},
   ];
+  const SANIERUNG_QS = [
+    { key:'Objektart', title:'Was möchten Sie sanieren oder umbauen?', layout:'list', type:'single', opts:[
+      {v:'Einfamilienhaus', l:'Einfamilienhaus'}, {v:'Doppelhaushälfte', l:'Doppelhaushälfte'}, {v:'Reihenhaus', l:'Reihenhaus'}, {v:'Mehrfamilienhaus', l:'Mehrfamilienhaus'}, {v:'Wohnung / einzelne Einheit', l:'Wohnung / einzelne Einheit'} ]},
+    { key:'Projektart', title:'Welche Art von Projekt planen Sie?', layout:'list', type:'single', opts:[
+      {v:'Teilsanierung / Modernisierung', l:'Teilsanierung / Modernisierung'}, {v:'Thermische Sanierung', l:'Thermische Sanierung'}, {v:'Kernsanierung', l:'Kernsanierung'}, {v:'Badsanierung', l:'Badsanierung'}, {v:'Umbau mit Grundrissänderung', l:'Umbau mit Grundrissänderung'}, {v:'Zubau / Erweiterung', l:'Zubau / Erweiterung'} ]},
+    { key:'Sanierungsfläche', title:'Wie groß ist die betroffene Fläche ungefähr?', layout:'list', type:'single', exactM2:true, opts:[
+      {v:'bis 50 m²', l:'bis 50 m²'}, {v:'50–100 m²', l:'50–100 m²'}, {v:'100–180 m²', l:'100–180 m²'}, {v:'180–300 m²', l:'180–300 m²'}, {v:'300+ m²', l:'300+ m²'} ]},
+    { key:'Baujahr', title:'Aus welchem Baujahr ist das Gebäude ungefähr?', layout:'list', type:'single', opts:[
+      {v:'vor 1950', l:'vor 1950'}, {v:'1950–1979', l:'1950–1979'}, {v:'1980–1999', l:'1980–1999'}, {v:'2000–2015', l:'2000–2015'}, {v:'nach 2015', l:'nach 2015'} ]},
+    { key:'Zustand', title:'Wie würden Sie den aktuellen Zustand beschreiben?', layout:'list', type:'single', opts:[
+      {v:'Gut erhalten, nur optische Modernisierung', l:'Gut erhalten, nur optische Modernisierung'}, {v:'Teilweise veraltet', l:'Teilweise veraltet'}, {v:'Deutlich sanierungsbedürftig', l:'Deutlich sanierungsbedürftig'}, {v:'Stark sanierungsbedürftig', l:'Stark sanierungsbedürftig'}, {v:'Unsicher / soll geprüft werden', l:'Unsicher / soll geprüft werden'} ]},
+    { key:'Bereiche', title:'Welche Bereiche sollen saniert oder erneuert werden?', layout:'list', type:'multi', none:'Keine Angabe', opts:[
+      {v:'Dach', l:'Dach'}, {v:'Fassade', l:'Fassade'}, {v:'Fenster', l:'Fenster'}, {v:'Heizung / Haustechnik', l:'Heizung / Haustechnik'}, {v:'Elektro', l:'Elektro'}, {v:'Sanitär / Bad', l:'Sanitär / Bad'}, {v:'Innenausbau', l:'Innenausbau'}, {v:'Böden / Oberflächen', l:'Böden / Oberflächen'}, {v:'Grundriss / Wände', l:'Grundriss / Wände'}, {v:'Keller / Feuchtigkeit', l:'Keller / Feuchtigkeit'}, {v:'Keine Angabe', l:'Keine Angabe'} ]},
+    { key:'Energetisch', title:'Soll das Gebäude energetisch verbessert werden?', layout:'list', type:'single', opts:[
+      {v:'Nein', l:'Nein'}, {v:'Ja, teilweise', l:'Ja, teilweise'}, {v:'Ja, umfassend', l:'Ja, umfassend'}, {v:'Ja, mit neuem Heizsystem', l:'Ja, mit neuem Heizsystem'}, {v:'Noch unklar', l:'Noch unklar'} ]},
+    { key:'Besonderheiten', title:'Gibt es bekannte Probleme oder Besonderheiten?', layout:'list', type:'multi', none:'Keine bekannten Besonderheiten', opts:[
+      {v:'Feuchtigkeit / Schimmel', l:'Feuchtigkeit / Schimmel'}, {v:'Risse / statische Bedenken', l:'Risse / statische Bedenken'}, {v:'Schadstoffe / Altlasten', l:'Schadstoffe / Altlasten'}, {v:'Denkmalschutz', l:'Denkmalschutz'}, {v:'Schwieriger Zugang / beengte Lage', l:'Schwieriger Zugang / beengte Lage'}, {v:'Hofgebäude', l:'Hofgebäude'}, {v:'Keine bekannten Besonderheiten', l:'Keine bekannten Besonderheiten'}, {v:'Noch unklar', l:'Noch unklar'} ]},
+  ];
 
   let i = 0;
   const qBody = document.getElementById('qBody');
-  const defByKey = {}; QUESTIONS.forEach(q => { defByKey[q.key]=q; (q.subs||[]).forEach(s=>defByKey[s.key]=s); });
+  let QUESTIONS, defByKey;
+  function rebuildQuestions(){ QUESTIONS = [START_Q, ...(answers['Vorhaben']==='Sanierung' ? SANIERUNG_QS : NEUBAU_QS)]; defByKey = {}; QUESTIONS.forEach(q => { defByKey[q.key]=q; (q.subs||[]).forEach(s=>defByKey[s.key]=s); }); }
+  rebuildQuestions();
   const subVisible = s => (typeof s.showIf==='function' ? s.showIf() : true);
   const groupsOf = q => [q, ...((q.subs||[]).filter(subVisible))];
 
@@ -323,19 +343,23 @@
       const hint = q.type==='multi' ? 'Mehrfachauswahl möglich.' : 'Eine Auswahl genügt.';
       let html = `<h3 class="qtitle">${q.title}</h3><p class="qhint">${hint}</p>${groupHTML(q)}`;
       if (q.massivNote && answers[q.key] && answers[q.key] !== 'Massivbau') html += `<div class="qnote">Derzeit nur Massivbau möglich, wird noch individuell geprüft.</div>`;
-      if (q.exactM2) html += `<div class="qextra"><input id="m2exact" type="number" inputmode="numeric" min="20" placeholder="Exakte Wohnfläche in m² (optional)" value="${answers._m2exact||''}"></div>`;
+      if (q.exactM2) html += `<div class="qextra"><input id="m2exact" type="number" inputmode="numeric" min="20" placeholder="Exakte Fläche in m² (optional)" value="${answers._m2exact||''}"></div>`;
       if (q.plz && answers[q.key]) html += `<div class="qextra"><label>PLZ (optional)</label><input id="plz" type="text" inputmode="numeric" maxlength="4" placeholder="z. B. 1010" value="${answers._plz||''}"></div>`;
       (q.subs||[]).forEach(s => { if (subVisible(s)) html += `<div class="qsub"><div class="qsublabel">${s.title}</div>${groupHTML(s)}</div>`; });
       qBody.innerHTML = html;
     } else {
-      const keys = ['Vorhaben','Bauvorhaben','Wohnfläche','Keller','Dachform','Leistungsumfang','Region'];
-      const rows = keys.map(k => { let v = answers[k]; if (k==='Wohnfläche' && answers._m2exact) v = answers._m2exact+' m²'; return `<div><span>${k}</span><span>${v||'–'}</span></div>`; }).join('');
-      const extras = (answers['Extras']||[]).filter(x=>x!=='Keine Extras');
+      const isSan = answers['Vorhaben']==='Sanierung';
+      const keys = isSan ? ['Vorhaben','Objektart','Projektart','Sanierungsfläche','Baujahr','Zustand']
+                         : ['Vorhaben','Bauvorhaben','Wohnfläche','Keller','Dachform','Leistungsumfang','Region'];
+      const rows = keys.map(k => { let v = answers[k]; if ((k==='Wohnfläche'||k==='Sanierungsfläche') && answers._m2exact) v = answers._m2exact+' m²'; return `<div><span>${k}</span><span>${v||'–'}</span></div>`; }).join('');
+      const multiKey = isSan ? 'Bereiche' : 'Extras'; const noneVal = isSan ? 'Keine Angabe' : 'Keine Extras';
+      const multiSel = (answers[multiKey]||[]).filter(x=>x!==noneVal);
+      const multiRow = multiSel.length ? `<div><span>${multiKey}</span><span>${multiSel.join(', ')}</span></div>` : '';
       qBody.innerHTML = `<h3 class="qtitle">Fast geschafft!</h3>
-        <p class="qhint">Wie dürfen wir Sie erreichen? Ihre grobe Preisrange senden wir Ihnen anschließend persönlich per WhatsApp.</p>
+        <p class="qhint">Wie dürfen wir Sie erreichen? ${isSan?'Ihre individuelle Einschätzung':'Ihre grobe Preisrange'} senden wir Ihnen anschließend persönlich per WhatsApp.</p>
         <div class="field"><label for="qName">Name</label><input id="qName" type="text" placeholder="Vor- und Nachname" value="${kontakt.name}"></div>
-        <div class="summary">${rows}${extras.length?`<div><span>Extras</span><span>${extras.join(', ')}</span></div>`:''}</div>
-        <div class="wa-note"><svg width="20" height="20" viewBox="0 0 24 24" fill="#25d366"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2Z"/></svg><span>Mit „Per WhatsApp senden" schicken Sie uns Ihre Angaben. Sie erhalten Ihre grobe Preisrange und alle Details persönlich per WhatsApp.</span></div>`;
+        <div class="summary">${rows}${multiRow}</div>
+        <div class="wa-note"><svg width="20" height="20" viewBox="0 0 24 24" fill="#25d366"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2Z"/></svg><span>Mit „Per WhatsApp senden" schicken Sie uns Ihre Angaben. Sie erhalten ${isSan?'Ihre individuelle Einschätzung':'Ihre grobe Preisrange'} und alle Details persönlich per WhatsApp.</span></div>`;
     }
     const total = QUESTIONS.length + 1;
     document.getElementById('progBar').style.width = ((i+1)/total*100) + '%';
@@ -353,7 +377,7 @@
       if (v===none) arr = arr.includes(v) ? [] : [v];
       else { if (none) arr = arr.filter(x=>x!==none); arr = arr.includes(v) ? arr.filter(x=>x!==v) : [...arr, v]; }
       answers[k] = arr;
-    } else { answers[k] = v; }
+    } else { answers[k] = v; if (k==='Vorhaben') rebuildQuestions(); }
     renderBody();
   });
   qBody.addEventListener('input', (e) => { if (e.target.id==='m2exact') answers._m2exact = e.target.value.trim(); if (e.target.id==='plz') answers._plz = e.target.value.trim(); });
@@ -382,14 +406,15 @@
   }
   function prev(){ if (i>0) { if (i===QUESTIONS.length) captureContact(); i--; renderBody(); scrollToFunnel(); } }
   function submit(){
-    const lines = ['Hallo RESCH|Bau, ich interessiere mich für einen Neubau.', '', 'Meine Angaben:'];
+    const isSan = answers['Vorhaben']==='Sanierung';
+    const lines = [isSan ? 'Hallo RESCH|Bau, ich interessiere mich für eine Sanierung / einen Umbau.' : 'Hallo RESCH|Bau, ich interessiere mich für einen Neubau.', '', 'Meine Angaben:'];
     QUESTIONS.forEach(q => {
       for (const g of groupsOf(q)) { let v = answers[g.key]; if (Array.isArray(v)) v = v.length ? v.join(', ') : '-'; if (v) lines.push(`• ${g.key}: ${v}`); }
     });
-    if (answers._m2exact) lines.push(`• Exakte Wohnfläche: ${answers._m2exact} m²`);
+    if (answers._m2exact) lines.push(`• Exakte Fläche: ${answers._m2exact} m²`);
     if (answers._plz) lines.push(`• PLZ: ${answers._plz}`);
     if (kontakt.name) lines.push('', `• Name: ${kontakt.name}`);
-    lines.push('', 'Bitte schickt mir meine grobe Preisrange und meldet euch für ein persönliches Gespräch. Danke!');
+    lines.push('', isSan ? 'Bitte meldet euch für eine individuelle Sanierungs-Einschätzung. Danke!' : 'Bitte schickt mir meine grobe Preisrange und meldet euch für ein persönliches Gespräch. Danke!');
     window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(lines.join('\n'))}`, '_blank');
   }
 
