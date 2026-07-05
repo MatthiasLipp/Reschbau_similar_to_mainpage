@@ -99,6 +99,14 @@
   .qopt.sel { border-color:var(--red); background:#fcecec; }
   .qopt .tick { width:20px; height:20px; border-radius:50%; border:2px solid var(--line); flex:none; display:grid; place-items:center; font-size:.7rem; color:#fff; }
   .qopt.sel .tick { border-color:var(--red); background:var(--red); }
+  .qopt-desc { align-items:flex-start; }
+  .qopt-desc .tick { margin-top:.2rem; }
+  .qopt-text { display:flex; flex-direction:column; gap:.15rem; }
+  .qopt-l { font-weight:800; color:var(--black); }
+  .qopt-d { font-weight:600; font-size:.82rem; color:var(--muted); line-height:1.3; }
+
+  .photo-slot { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.2rem; width:100%; height:100%; background:repeating-linear-gradient(45deg,#f5f5f5,#f5f5f5 9px,#efefef 9px,#efefef 18px); color:var(--red); font-size:.66rem; font-weight:800; text-transform:uppercase; letter-spacing:.06em; text-align:center; }
+  .photo-slot .ps-cam { font-size:1.5rem; line-height:1; }
 
   .qsub { margin-top:1.1rem; padding-top:1rem; border-top:1px solid #eee; }
   .qsublabel { font-weight:800; color:var(--black); font-size:1rem; margin-bottom:.55rem; }
@@ -147,7 +155,7 @@
 
     <div class="funnel">
       <div class="fprogress"><i id="progBar"></i></div>
-      <div class="fstep" id="stepLabel">Schritt 1 von 16</div>
+      <div class="fstep" id="stepLabel">Schritt 1 von 11</div>
       <div class="fbody" id="qBody"></div>
       <div class="ffoot">
         <button class="btn-ghost" id="backBtn" onclick="prev()" style="display:none">← Zurück</button>
@@ -251,11 +259,13 @@
     'Carport':'Überdachter Stellplatz (offen)'
   };
 
-  const answers = {}; const kontakt = { name:'', files:0 };
+  const answers = {}; const kontakt = { name:'' };
 
   const pitched = () => answers['Dachform'] && answers['Dachform'] !== 'Flachdach';
 
   const QUESTIONS = [
+    { key:'Vorhaben', title:'Was möchten Sie umsetzen?', layout:'img', type:'single', cols:2, opts:[
+      {v:'Neubau', l:'Neubau', e:'🏗️'}, {v:'Sanierung', l:'Sanierung', e:'🛠️'} ]},
     { key:'Bauvorhaben', title:'Was möchten Sie bauen?', layout:'img', type:'single', cols:2, opts:[
       {v:'Einfamilienhaus', l:'Einfamilienhaus', e:'🏠'}, {v:'Mehrfamilienhaus', l:'Mehrfamilienhaus', e:'🏢'}, {v:'Zubau', l:'Zubau', e:'🧱'}, {v:'Garage', l:'Garage', e:'🚗'} ]},
     { key:'Wohnfläche', title:'Wie groß soll die Wohnfläche sein?', layout:'list', type:'single', exactM2:true, opts:[
@@ -266,34 +276,22 @@
       {v:'1 Geschoss / Bungalow', l:'1 Geschoss', s:'Bungalow', e:'🏠'}, {v:'2 Geschosse', l:'2 Geschosse', e:'🏠'}, {v:'3 Geschosse', l:'3 Geschosse', e:'🏢'} ]},
     { key:'Dachgeschoss', title:'Ist ein Dachgeschoss geplant?', layout:'list', type:'single', opts:[
       {v:'Nein', l:'Nein'}, {v:'Ja', l:'Ja'}, {v:'Noch offen', l:'Noch offen'} ]},
-    { key:'Dachform', title:'Welche Dachform bevorzugen Sie?', layout:'img', type:'single', cols:2, opts:[
+    { key:'Dachform', title:'Welche Dachform bevorzugen Sie?', layout:'img', type:'single', cols:2, photo:true, opts:[
       {v:'Flachdach', l:'Flachdach', e:'⏤'}, {v:'Satteldach', l:'Satteldach', e:'⛺'}, {v:'Walmdach', l:'Walmdach', e:'🏔️'}, {v:'Pultdach', l:'Pultdach', e:'📐'} ],
       subs:[
         { key:'Gauben', title:'Sind Gauben gewünscht?', layout:'list', type:'single', showIf:pitched, opts:[{v:'Nein',l:'Nein'},{v:'Ja',l:'Ja'}] },
         { key:'Anzahl Gauben', title:'Wie viele Gauben sind geplant?', layout:'list', type:'single', showIf:()=>pitched()&&answers['Gauben']==='Ja', opts:[{v:'1 Gaube',l:'1 Gaube'},{v:'2 Gauben',l:'2 Gauben'},{v:'3 oder mehr Gauben',l:'3 oder mehr Gauben'},{v:'Noch offen',l:'Noch offen'}] },
         { key:'Dachflächenfenster', title:'Sind Dachflächenfenster geplant?', layout:'list', type:'single', showIf:pitched, opts:[{v:'Nein',l:'Nein'},{v:'Ja',l:'Ja'}] },
       ] },
-    { key:'Bauweise', title:'Welche Bauweise bevorzugen Sie?', layout:'img', type:'single', cols:3, opts:[
+    { key:'Bauweise', title:'Welche Bauweise bevorzugen Sie?', layout:'img', type:'single', cols:3, photo:true, massivNote:true, opts:[
       {v:'Massivbau', l:'Massivbau', s:'Ziegel / Beton', e:'🧱'}, {v:'Holzbau / Holzriegelbau', l:'Holzbau', s:'Holzriegelbau', e:'🪵'}, {v:'Fertigteilbau', l:'Fertigteilbau', s:'Vorgefertigt', e:'🏭'} ]},
-    { key:'Leistungsumfang', title:'Welcher Leistungsumfang soll kalkuliert werden?', layout:'list', type:'single', showNote:true, opts:[
+    { key:'Leistungsumfang', title:'Welcher Leistungsumfang soll kalkuliert werden?', layout:'list', type:'single', showDesc:true, opts:[
       {v:'Belagsfertig', l:'Belagsfertig', desc:'Malerfertig: Wände gemalt, Steckdosen vorhanden, ohne Boden.'},
       {v:'Schlüsselfertig standardisierte Innenausstattung', l:'Schlüsselfertig (standardisierte Innenausstattung)', desc:'Bezugsfertig: komplette Innenausstattung inkl. Böden, Türen und Sanitär.'} ]},
     { key:'Extras', title:'Welche Extras wünschen Sie?', layout:'img', type:'multi', cols:2, none:'Keine Extras', opts:[
       {v:'Garage', l:'Garage', e:'🚗'}, {v:'Carport', l:'Carport', e:'🅿️'}, {v:'Terrasse / Balkon', l:'Terrasse / Balkon', e:'☀️'}, {v:'Photovoltaik', l:'Photovoltaik', e:'⚡'}, {v:'Smart Home', l:'Smart Home', e:'📱'}, {v:'Gartengestaltung', l:'Gartengestaltung', e:'🌳'}, {v:'Gartenzaun', l:'Gartenzaun', e:'🚧'}, {v:'Pool', l:'Pool', e:'🏊'}, {v:'Keine Extras', l:'Keine Extras', e:'✖️'} ]},
-    { key:'Region', title:'Wo soll Ihr Neubauprojekt entstehen?', layout:'list', type:'single', opts:[
+    { key:'Region', title:'Wo soll Ihr Neubauprojekt entstehen?', layout:'list', type:'single', plz:true, opts:[
       {v:'Wien', l:'Wien'}, {v:'Niederösterreich', l:'Niederösterreich'}, {v:'Burgenland', l:'Burgenland'}, {v:'Außerhalb dieser Region', l:'Außerhalb dieser Region'} ]},
-    { key:'Grundstück', title:'Gibt es bereits ein Grundstück?', layout:'list', type:'single', opts:[
-      {v:'Ja', l:'Ja'}, {v:'Nein', l:'Nein'}, {v:'In Abklärung', l:'In Abklärung'} ]},
-    { key:'Projektstand', title:'Wie weit ist Ihr Projekt aktuell?', layout:'list', type:'single', opts:[
-      {v:'Erste Idee', l:'Erste Idee'}, {v:'Erste Skizzen vorhanden', l:'Erste Skizzen vorhanden'}, {v:'Grundriss vorhanden', l:'Grundriss vorhanden'}, {v:'Bereits mit Planer gesprochen', l:'Bereits mit Planer gesprochen'}, {v:'Planung / Einreichung in Vorbereitung', l:'Planung / Einreichung in Vorbereitung'} ]},
-    { key:'Start', title:'Wann möchten Sie starten?', layout:'list', type:'single', opts:[
-      {v:'Sofort / in den nächsten 3 Monaten', l:'Sofort / in den nächsten 3 Monaten'}, {v:'In 3–6 Monaten', l:'In 3–6 Monaten'}, {v:'In 6–12 Monaten', l:'In 6–12 Monaten'}, {v:'Später / noch offen', l:'Später / noch offen'} ]},
-    { key:'Budget', title:'Welcher Budgetrahmen ist grob vorgesehen?', layout:'list', type:'single', opts:[
-      {v:'Unter 250.000 €', l:'Unter 250.000 €'}, {v:'250.000–400.000 €', l:'250.000–400.000 €'}, {v:'400.000–600.000 €', l:'400.000–600.000 €'}, {v:'600.000 €+', l:'600.000 €+'}, {v:'Noch offen', l:'Noch offen'} ]},
-    { key:'Nächster Schritt', title:'Was ist Ihr gewünschter nächster Schritt?', layout:'list', type:'single', opts:[
-      {v:'Nur eine erste Kostenschätzung', l:'Ich möchte nur eine erste Kostenschätzung'}, {v:'Unverbindliches Erstgespräch', l:'Ich möchte ein unverbindliches Erstgespräch'}, {v:'Planungsgespräch', l:'Ich möchte ein Planungsgespräch'}, {v:'Projekt vorprüfen lassen', l:'Ich möchte mein Projekt vorprüfen lassen'}, {v:'Planung + spätere Ausführung', l:'Planung + spätere Ausführung'} ]},
-    { key:'Unterlagen', title:'Gibt es bereits Unterlagen oder Skizzen?', layout:'list', type:'multi', none:'Noch keine Unterlagen', fileUpload:true, opts:[
-      {v:'Handskizze vorhanden', l:'Handskizze vorhanden'}, {v:'Grundriss vorhanden', l:'Grundriss vorhanden'}, {v:'Lageplan vorhanden', l:'Lageplan vorhanden'}, {v:'Inspirationsbilder vorhanden', l:'Inspirationsbilder vorhanden'}, {v:'Noch keine Unterlagen', l:'Noch keine Unterlagen'} ]},
   ];
 
   let i = 0;
@@ -302,12 +300,15 @@
   const subVisible = s => (typeof s.showIf==='function' ? s.showIf() : true);
   const groupsOf = q => [q, ...((q.subs||[]).filter(subVisible))];
 
-  function media(o){ if (USE_IMAGES && o.img) return `<img src="${o.img}" alt="">`; const ik=ICON_FOR[o.v]; return ICONS[ik] ? `<svg viewBox="0 0 48 40" class="qicon">${ICONS[ik]}</svg>` : `<span class="emoji">${o.e||'•'}</span>`; }
+  function media(g, o){ if (o.img) return `<img src="${o.img}" alt="${o.l}">`; if (g.photo) return `<span class="photo-slot"><span class="ps-cam">📷</span>Foto von Resch</span>`; const ik=ICON_FOR[o.v]; return ICONS[ik] ? `<svg viewBox="0 0 48 40" class="qicon">${ICONS[ik]}</svg>` : `<span class="emoji">${o.e||'•'}</span>`; }
   function optHTML(g, o){
     const isSel = g.type==='multi' ? (answers[g.key]||[]).includes(o.v) : answers[g.key]===o.v;
     const desc = o.s || INFO[o.v] || '';
     if (g.layout==='img') {
-      return `<button type="button" class="qcard${isSel?' sel':''}" data-k="${g.key}" data-t="${g.type}" data-v="${o.v}"><span class="check">✓</span><span class="media">${media(o)}</span><span class="lab">${o.l}</span>${desc?`<span class="sub">${desc}</span>`:''}</button>`;
+      return `<button type="button" class="qcard${isSel?' sel':''}" data-k="${g.key}" data-t="${g.type}" data-v="${o.v}"><span class="check">✓</span><span class="media">${media(g,o)}</span><span class="lab">${o.l}</span>${desc?`<span class="sub">${desc}</span>`:''}</button>`;
+    }
+    if (g.showDesc && o.desc) {
+      return `<button type="button" class="qopt qopt-desc${isSel?' sel':''}" data-k="${g.key}" data-t="${g.type}" data-v="${o.v}"><span class="tick">${isSel?'✓':''}</span><span class="qopt-text"><span class="qopt-l">${o.l}</span><span class="qopt-d">${o.desc}</span></span></button>`;
     }
     return `<button type="button" class="qopt${isSel?' sel':''}" data-k="${g.key}" data-t="${g.type}" data-v="${o.v}"><span class="tick">${isSel?'✓':''}</span><span>${o.l}</span></button>`;
   }
@@ -321,13 +322,13 @@
       const q = QUESTIONS[i];
       const hint = q.type==='multi' ? 'Mehrfachauswahl möglich.' : 'Eine Auswahl genügt.';
       let html = `<h3 class="qtitle">${q.title}</h3><p class="qhint">${hint}</p>${groupHTML(q)}`;
-      if (q.showNote){ const sel = q.opts.find(o=>o.v===answers[q.key]); if (sel && sel.desc) html += `<div class="qnote">${sel.desc}</div>`; }
+      if (q.massivNote && answers[q.key] && answers[q.key] !== 'Massivbau') html += `<div class="qnote">Derzeit nur Massivbau möglich, wird noch individuell geprüft.</div>`;
       if (q.exactM2) html += `<div class="qextra"><input id="m2exact" type="number" inputmode="numeric" min="20" placeholder="Exakte Wohnfläche in m² (optional)" value="${answers._m2exact||''}"></div>`;
+      if (q.plz && answers[q.key]) html += `<div class="qextra"><label>PLZ (optional)</label><input id="plz" type="text" inputmode="numeric" maxlength="4" placeholder="z. B. 1010" value="${answers._plz||''}"></div>`;
       (q.subs||[]).forEach(s => { if (subVisible(s)) html += `<div class="qsub"><div class="qsublabel">${s.title}</div>${groupHTML(s)}</div>`; });
-      if (q.fileUpload) html += `<div class="qfile"><label>Unterlagen hochladen (optional, kein Backend-Upload aktiv)</label><input id="files" type="file" multiple></div>`;
       qBody.innerHTML = html;
     } else {
-      const keys = ['Bauvorhaben','Wohnfläche','Keller','Dachform','Leistungsumfang','Region'];
+      const keys = ['Vorhaben','Bauvorhaben','Wohnfläche','Keller','Dachform','Leistungsumfang','Region'];
       const rows = keys.map(k => { let v = answers[k]; if (k==='Wohnfläche' && answers._m2exact) v = answers._m2exact+' m²'; return `<div><span>${k}</span><span>${v||'–'}</span></div>`; }).join('');
       const extras = (answers['Extras']||[]).filter(x=>x!=='Keine Extras');
       qBody.innerHTML = `<h3 class="qtitle">Fast geschafft!</h3>
@@ -338,7 +339,7 @@
     }
     const total = QUESTIONS.length + 1;
     document.getElementById('progBar').style.width = ((i+1)/total*100) + '%';
-    document.getElementById('stepLabel').textContent = i < QUESTIONS.length ? `Schritt ${i+1} von ${QUESTIONS.length} – Neubau` : 'Fast geschafft';
+    document.getElementById('stepLabel').textContent = i < QUESTIONS.length ? `Schritt ${i+1} von ${QUESTIONS.length} – ${answers['Vorhaben']||'Neubau'}` : 'Fast geschafft';
     document.getElementById('backBtn').style.display = i===0 ? 'none' : 'inline-flex';
     document.getElementById('nextBtn').textContent = i===QUESTIONS.length ? 'Per WhatsApp senden' : 'Weiter →';
   }
@@ -355,8 +356,7 @@
     } else { answers[k] = v; }
     renderBody();
   });
-  qBody.addEventListener('input', (e) => { if (e.target.id==='m2exact') answers._m2exact = e.target.value.trim(); });
-  qBody.addEventListener('change', (e) => { if (e.target.id==='files') kontakt.files = e.target.files.length; });
+  qBody.addEventListener('input', (e) => { if (e.target.id==='m2exact') answers._m2exact = e.target.value.trim(); if (e.target.id==='plz') answers._plz = e.target.value.trim(); });
 
   function captureContact(){ const n=document.getElementById('qName'); if (n) kontakt.name = n.value.trim(); }
   function shakeBody(){ qBody.classList.remove('shake'); void qBody.offsetWidth; qBody.classList.add('shake'); }
@@ -370,23 +370,24 @@
     }
     return true;
   }
+  function scrollToFunnel(){ const f=document.querySelector('.funnel'); if(!f) return; const y=f.getBoundingClientRect().top + window.pageYOffset - 16; window.scrollTo({top:y<0?0:y,behavior:'smooth'}); }
   function next(){
     if (i < QUESTIONS.length) {
       if (!stepValid()) { shakeBody(); return; }
-      i++; renderBody(); window.scrollTo({top:0,behavior:'smooth'}); return;
+      i++; renderBody(); scrollToFunnel(); return;
     }
     captureContact();
     if (!kontakt.name) { const n=document.getElementById('qName'); if (n) n.focus(); shakeBody(); return; }
     submit();
   }
-  function prev(){ if (i>0) { if (i===QUESTIONS.length) captureContact(); i--; renderBody(); window.scrollTo({top:0,behavior:'smooth'}); } }
+  function prev(){ if (i>0) { if (i===QUESTIONS.length) captureContact(); i--; renderBody(); scrollToFunnel(); } }
   function submit(){
     const lines = ['Hallo RESCH|Bau, ich interessiere mich für einen Neubau.', '', 'Meine Angaben:'];
     QUESTIONS.forEach(q => {
       for (const g of groupsOf(q)) { let v = answers[g.key]; if (Array.isArray(v)) v = v.length ? v.join(', ') : '-'; if (v) lines.push(`• ${g.key}: ${v}`); }
     });
     if (answers._m2exact) lines.push(`• Exakte Wohnfläche: ${answers._m2exact} m²`);
-    if (kontakt.files) lines.push(`• Unterlagen: ${kontakt.files} Datei(en) ausgewählt (bitte per WhatsApp nachsenden)`);
+    if (answers._plz) lines.push(`• PLZ: ${answers._plz}`);
     if (kontakt.name) lines.push('', `• Name: ${kontakt.name}`);
     lines.push('', 'Bitte schickt mir meine grobe Preisrange und meldet euch für ein persönliches Gespräch. Danke!');
     window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(lines.join('\n'))}`, '_blank');
