@@ -263,6 +263,34 @@
 
   const pitched = () => answers['Dachform'] && answers['Dachform'] !== 'Flachdach';
 
+  /* ===== Baukosten-Berechnung (Werte hier anpassbar) – wird nur berechnet & lokal gespeichert, nicht angezeigt ===== */
+  const REGION_M2 = { 'Wien':4650, 'Niederösterreich':3950, 'Burgenland':3450, 'Außerhalb dieser Region':3950 }; // €/m² (Außerhalb = NÖ als Näherung)
+  const LEISTUNG_FAKTOR = { 'Belagsfertig':0.92, 'Schlüsselfertig standardisierte Innenausstattung':1.00 };
+  const DACHFORM_FAKTOR = { 'Flachdach':1.00, 'Satteldach':1.00, 'Walmdach':1.04, 'Pultdach':1.02 };
+  const KELLER_ANTEIL = { 'Kein Keller':0, 'Teilunterkellert':0.5, 'Vollunterkellert':1 }; // Anteil der Grundfläche
+  const KELLER_KOSTENFAKTOR = 0.55; // Keller kostet diesen Anteil des m²-Werts
+  /* Platzhalter – vorerst 0 (echte Resch-/CSV-Werte hier eintragen): */
+  const GAUBE_PREIS = 0;               // € je Gaube
+  const DACHFLAECHENFENSTER_PREIS = 0; // € wenn Dachflächenfenster geplant
+  const EXTRA_PREISE = { 'Garage':0, 'Carport':0, 'Terrasse / Balkon':0, 'Photovoltaik':0, 'Smart Home':0, 'Gartengestaltung':0, 'Gartenzaun':0, 'Pool':0 };
+  function getWohnflaeche(){ if (answers._m2exact && +answers._m2exact>0) return +answers._m2exact; const f=answers['Wohnfläche']||''; if (f.indexOf('80–120')===0) return 100; if (f.indexOf('120–160')===0) return 140; if (f.indexOf('über 160')===0) return 190; return 140; }
+  function getGeschosse(){ const s=answers['Stockwerke']||''; if (s.indexOf('2 Geschosse')===0) return 2; if (s.indexOf('3 Geschosse')===0) return 3; return 1; }
+  function getAnzahlGauben(){ const g=answers['Anzahl Gauben']||''; if (g.indexOf('1 Gaube')===0) return 1; if (g.indexOf('2 Gauben')===0) return 2; if (g.indexOf('3 oder mehr')===0) return 3; return 0; }
+  function berechneRange(){
+    const wf=getWohnflaeche(); const m2wert=REGION_M2[answers['Region']] ?? REGION_M2['Außerhalb dieser Region'];
+    const basis=wf*m2wert; const lf=LEISTUNG_FAKTOR[answers['Leistungsumfang']] ?? 1.00; const basisNachLeistung=basis*lf;
+    const geschosse=getGeschosse(); const grundflaeche=wf/geschosse;
+    const kellerkosten=grundflaeche*(KELLER_ANTEIL[answers['Keller']] ?? 0)*m2wert*KELLER_KOSTENFAKTOR;
+    const dachFaktor=DACHFORM_FAKTOR[answers['Dachform']] ?? 1.00; const dachZuschlag=basisNachLeistung*(dachFaktor-1);
+    const gaubenZuschlag=(answers['Gauben']==='Ja'?getAnzahlGauben():0)*GAUBE_PREIS;
+    const dffZuschlag=(answers['Dachflächenfenster']==='Ja')?DACHFLAECHENFENSTER_PREIS:0;
+    const extras=(answers['Extras']||[]).reduce((s,x)=>s+(EXTRA_PREISE[x]||0),0);
+    const zwischensumme=basisNachLeistung+kellerkosten+dachZuschlag+gaubenZuschlag+dffZuschlag+extras;
+    return { wohnflaeche:wf, m2wert, basis, leistungsfaktor:lf, basisNachLeistung, geschosse, grundflaeche, kellerkosten, dachFaktor, dachZuschlag, gaubenZuschlag, dffZuschlag, extras, zwischensumme, range_low:Math.round(zwischensumme*0.90), range_high:Math.round(zwischensumme*1.20) };
+  }
+  function speichereBaukosten(quelle){ if (answers['Vorhaben']==='Sanierung') return null; const b=berechneRange(); const payload={ zeit:new Date().toISOString(), quelle:quelle||'', eingaben:{...answers}, berechnung:b }; try{ localStorage.setItem('resch_baukosten', JSON.stringify(payload)); }catch(e){} console.log('%c[RESCH Baukosten-Berechnung]','color:#cf2027;font-weight:bold', payload); return payload; }
+  window.zeigeBaukosten = function(){ try{ const d=JSON.parse(localStorage.getItem('resch_baukosten')||'null'); console.log('[RESCH] gespeicherte Berechnung:', d); return d; }catch(e){ return null; } };
+
   const START_Q = { key:'Vorhaben', title:'Was möchten Sie umsetzen?', layout:'img', type:'single', cols:2, opts:[
       {v:'Neubau', l:'Neubau', e:'🏗️'}, {v:'Sanierung', l:'Sanierung', e:'🛠️'} ]};
   const NEUBAU_QS = [
@@ -349,6 +377,7 @@
       qBody.innerHTML = html;
     } else {
       const isSan = answers['Vorhaben']==='Sanierung';
+      if (!isSan) speichereBaukosten('result');
       const keys = isSan ? ['Vorhaben','Objektart','Projektart','Sanierungsfläche','Baujahr','Zustand']
                          : ['Vorhaben','Bauvorhaben','Wohnfläche','Keller','Dachform','Leistungsumfang','Region'];
       const rows = keys.map(k => { let v = answers[k]; if ((k==='Wohnfläche'||k==='Sanierungsfläche') && answers._m2exact) v = answers._m2exact+' m²'; return `<div><span>${k}</span><span>${v||'–'}</span></div>`; }).join('');
@@ -407,6 +436,7 @@
   function prev(){ if (i>0) { if (i===QUESTIONS.length) captureContact(); i--; renderBody(); scrollToFunnel(); } }
   function submit(){
     const isSan = answers['Vorhaben']==='Sanierung';
+    if (!isSan) speichereBaukosten('submit');
     const lines = [isSan ? 'Hallo RESCH|Bau, ich interessiere mich für eine Sanierung / einen Umbau.' : 'Hallo RESCH|Bau, ich interessiere mich für einen Neubau.', '', 'Meine Angaben:'];
     QUESTIONS.forEach(q => {
       for (const g of groupsOf(q)) { let v = answers[g.key]; if (Array.isArray(v)) v = v.length ? v.join(', ') : '-'; if (v) lines.push(`• ${g.key}: ${v}`); }
