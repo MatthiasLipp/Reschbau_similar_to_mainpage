@@ -125,6 +125,9 @@
   .summary span:first-child { color:var(--muted); }
   .summary span:last-child { font-weight:700; text-align:right; color:var(--black); }
   .wa-note { display:flex; gap:.6rem; align-items:flex-start; background:#eef9f1; border:1px solid #bfe6cc; padding:.9rem 1rem; font-size:.88rem; color:#1d4a2c; }
+  .consent { display:flex; gap:.6rem; align-items:flex-start; margin-top:1rem; font-size:.82rem; color:#444; line-height:1.4; cursor:pointer; }
+  .consent input { margin-top:.15rem; width:18px; height:18px; flex:none; accent-color:var(--red); cursor:pointer; }
+  .consent.miss { color:var(--red); } .consent.miss input { outline:2px solid var(--red); }
 
   .btn-red { display:inline-flex; align-items:center; justify-content:center; gap:.5rem; background:var(--red); color:#fff; font-weight:700; font-size:1rem; min-height:52px; padding:.85rem 1.6rem; border:0; cursor:pointer; text-transform:uppercase; letter-spacing:.05em; transition:background .15s, transform .1s; }
   .btn-red:hover { background:var(--red-dk); } .btn-red:active { transform:translateY(1px); }
@@ -259,7 +262,8 @@
     'Carport':'Überdachter Stellplatz (offen)'
   };
 
-  const answers = {}; const kontakt = { name:'' };
+  const answers = {}; const kontakt = { name:'', consent:false };
+  const CONSENT_HTML = `<label class="consent"><input type="checkbox" id="qConsent"><span>Ich stimme zu, dass Reschbau meine übermittelten Daten im CRM-System speichern und verarbeiten darf, um meine Anfrage zu bearbeiten, und mich per E-Mail oder WhatsApp bezüglich dieser Anfrage kontaktieren darf. Ich kann diese Einwilligung jederzeit widerrufen.</span></label>`;
 
   const pitched = () => answers['Dachform'] && answers['Dachform'] !== 'Flachdach';
 
@@ -324,10 +328,10 @@
   const SANIERUNG_QS = [
     { key:'Objektart', title:'Was möchten Sie sanieren oder umbauen?', layout:'list', type:'single', opts:[
       {v:'Einfamilienhaus', l:'Einfamilienhaus'}, {v:'Doppelhaushälfte', l:'Doppelhaushälfte'}, {v:'Reihenhaus', l:'Reihenhaus'}, {v:'Mehrfamilienhaus', l:'Mehrfamilienhaus'}, {v:'Wohnung / einzelne Einheit', l:'Wohnung / einzelne Einheit'} ]},
-    { key:'Projektart', title:'Welche Art von Projekt planen Sie?', layout:'list', type:'single', opts:[
+    { key:'Projektart', title:'Welche Art von Sanierung planen Sie?', layout:'list', type:'single', opts:[
       {v:'Teilsanierung / Modernisierung', l:'Teilsanierung / Modernisierung'}, {v:'Thermische Sanierung', l:'Thermische Sanierung'}, {v:'Kernsanierung', l:'Kernsanierung'}, {v:'Badsanierung', l:'Badsanierung'}, {v:'Umbau mit Grundrissänderung', l:'Umbau mit Grundrissänderung'}, {v:'Zubau / Erweiterung', l:'Zubau / Erweiterung'} ]},
     { key:'Sanierungsfläche', title:'Wie groß ist die betroffene Fläche ungefähr?', layout:'list', type:'single', exactM2:true, opts:[
-      {v:'bis 50 m²', l:'bis 50 m²'}, {v:'50–100 m²', l:'50–100 m²'}, {v:'100–180 m²', l:'100–180 m²'}, {v:'180–300 m²', l:'180–300 m²'}, {v:'300+ m²', l:'300+ m²'} ]},
+      {v:'bis 15 m²', l:'bis 15 m²'}, {v:'15–40 m²', l:'15–40 m²'}, {v:'40–100 m²', l:'40–100 m²'}, {v:'100–300 m²', l:'100–300 m²'}, {v:'über 300 m²', l:'über 300 m²'} ]},
     { key:'Baujahr', title:'Aus welchem Baujahr ist das Gebäude ungefähr?', layout:'list', type:'single', opts:[
       {v:'vor 1950', l:'vor 1950'}, {v:'1950–1979', l:'1950–1979'}, {v:'1980–1999', l:'1980–1999'}, {v:'2000–2015', l:'2000–2015'}, {v:'nach 2015', l:'nach 2015'} ]},
     { key:'Zustand', title:'Wie würden Sie den aktuellen Zustand beschreiben?', layout:'list', type:'single', opts:[
@@ -388,7 +392,7 @@
         <p class="qhint">Wie dürfen wir Sie erreichen? ${isSan?'Ihre individuelle Einschätzung':'Ihre grobe Preisrange'} senden wir Ihnen anschließend persönlich per WhatsApp.</p>
         <div class="field"><label for="qName">Name</label><input id="qName" type="text" placeholder="Vor- und Nachname" value="${kontakt.name}"></div>
         <div class="summary">${rows}${multiRow}</div>
-        <div class="wa-note"><svg width="20" height="20" viewBox="0 0 24 24" fill="#25d366"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2Z"/></svg><span>Mit „Per WhatsApp senden" schicken Sie uns Ihre Angaben. Sie erhalten ${isSan?'Ihre individuelle Einschätzung':'Ihre grobe Preisrange'} und alle Details persönlich per WhatsApp.</span></div>`;
+        <div class="wa-note"><svg width="20" height="20" viewBox="0 0 24 24" fill="#25d366"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2Z"/></svg><span>Mit „Per WhatsApp senden" schicken Sie uns Ihre Angaben. Sie erhalten ${isSan?'Ihre individuelle Einschätzung':'Ihre grobe Preisrange'} und alle Details persönlich per WhatsApp.</span></div>${CONSENT_HTML}`;
     }
     const total = QUESTIONS.length + 1;
     document.getElementById('progBar').style.width = ((i+1)/total*100) + '%';
@@ -410,8 +414,9 @@
     renderBody();
   });
   qBody.addEventListener('input', (e) => { if (e.target.id==='m2exact') answers._m2exact = e.target.value.trim(); if (e.target.id==='plz') answers._plz = e.target.value.trim(); });
+  qBody.addEventListener('change', (e) => { if (e.target.id==='qConsent'){ kontakt.consent = e.target.checked; if (e.target.checked){ const w=e.target.closest('.consent'); if (w) w.classList.remove('miss'); } } });
 
-  function captureContact(){ const n=document.getElementById('qName'); if (n) kontakt.name = n.value.trim(); }
+  function captureContact(){ const n=document.getElementById('qName'); if (n) kontakt.name = n.value.trim(); const c=document.getElementById('qConsent'); if (c) kontakt.consent = c.checked; }
   function shakeBody(){ qBody.classList.remove('shake'); void qBody.offsetWidth; qBody.classList.add('shake'); }
   function stepValid(){
     const q = QUESTIONS[i];
@@ -431,6 +436,7 @@
     }
     captureContact();
     if (!kontakt.name) { const n=document.getElementById('qName'); if (n) n.focus(); shakeBody(); return; }
+    if (!kontakt.consent) { const c=document.getElementById('qConsent'); if (c){ c.closest('.consent').classList.add('miss'); c.focus(); } shakeBody(); return; }
     submit();
   }
   function prev(){ if (i>0) { if (i===QUESTIONS.length) captureContact(); i--; renderBody(); scrollToFunnel(); } }
@@ -444,6 +450,7 @@
     if (answers._m2exact) lines.push(`• Exakte Fläche: ${answers._m2exact} m²`);
     if (answers._plz) lines.push(`• PLZ: ${answers._plz}`);
     if (kontakt.name) lines.push('', `• Name: ${kontakt.name}`);
+    if (kontakt.consent) lines.push(`• Einwilligung Datenverarbeitung & Kontakt: erteilt`);
     lines.push('', isSan ? 'Bitte meldet euch für eine individuelle Sanierungs-Einschätzung. Danke!' : 'Bitte schickt mir meine grobe Preisrange und meldet euch für ein persönliches Gespräch. Danke!');
     window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(lines.join('\n'))}`, '_blank');
   }
