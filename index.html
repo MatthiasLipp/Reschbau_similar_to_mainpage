@@ -370,7 +370,7 @@
       const q = QUESTIONS[i];
       const hint = q.type==='multi' ? 'Mehrfachauswahl möglich.' : 'Eine Auswahl genügt.';
       let html = `<h3 class="qtitle">${q.title}</h3><p class="qhint">${hint}</p>${groupHTML(q)}`;
-      if (q.massivNote && answers[q.key] && answers[q.key] !== 'Massivbau') html += `<div class="qnote">Derzeit nur Massivbau möglich, wird noch individuell geprüft.</div>`;
+      if (q.massivNote && answers[q.key] && answers[q.key] !== 'Massivbau') html += `<div class="qnote">Die Standard-Kalkulation von Reschbau ist aktuell auf Massivbau ausgelegt. Ihre Anfrage kann dennoch übermittelt und individuell geprüft werden.</div>`;
       if (q.exactM2) html += `<div class="qextra"><input id="m2exact" type="number" inputmode="numeric" min="20" placeholder="Exakte Fläche in m² (optional)" value="${answers._m2exact||''}"></div>`;
       if (q.plz && answers[q.key]) html += `<div class="qextra"><label>PLZ (optional)</label><input id="plz" type="text" inputmode="numeric" maxlength="4" placeholder="z. B. 1010" value="${answers._plz||''}"></div>`;
       (q.subs||[]).forEach(s => { if (subVisible(s)) html += `<div class="qsub"><div class="qsublabel">${s.title}</div>${groupHTML(s)}</div>`; });
