@@ -8,6 +8,17 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
+<script>
+  /* Embed-Modus: als iFrame (z. B. auf reschbau.at/baukosten-check) oder mit ?embedded=1.
+     Läuft synchron im <head>, damit die Klasse vor dem ersten Paint gesetzt ist (kein Layout-Shift). */
+  (function () {
+    var emb = false;
+    try {
+      emb = new URLSearchParams(location.search).get('embedded') === '1' || window.self !== window.top;
+    } catch (e) { emb = true; }
+    if (emb) document.documentElement.classList.add('embedded');
+  })();
+</script>
 <style>
   :root { --red:#cf2027; --red-dk:#b51a20; --black:#161616; --ink:#2b2b2b; --muted:#6c6c6c; --box:#ededed; --line:#d9d9d9; --white:#ffffff; }
   * { box-sizing:border-box; }
@@ -137,6 +148,17 @@
   @media (max-width:820px){ .cards{ grid-template-columns:1fr; } }
   @media (max-width:560px){ .qcard-grid{ gap:.5rem; } }
   @media (max-width:360px){ .qcard-grid{ grid-template-columns:1fr; } }
+
+  /* ---------- Embed-Modus (iFrame in Wix-Seite) ---------- */
+  html.embedded .brand,
+  html.embedded .headline,
+  html.embedded .badge,
+  html.embedded .introline,
+  html.embedded footer .flogo,
+  html.embedded footer .freg { display:none; }
+  html.embedded .hero { padding-top:.5rem; }
+  html.embedded .funnel { margin-top:0; }
+  html.embedded footer { padding:1.1rem 0; }
 </style>
 </head>
 <body>
@@ -216,6 +238,7 @@
   /* ===== Baukosten-Funnel (16 Fragen, inline; Preis kommt per WhatsApp) ===== */
   const WA_NUMBER = '436765409552';
   const USE_IMAGES = false;
+  const IS_EMBEDDED = document.documentElement.classList.contains('embedded');
 
   const ICONS = {
     efh:'<path d="M8 22 24 9 40 22"/><path d="M12 21v13h24V21"/><path d="M21 34v-7h6v7"/>',
@@ -428,7 +451,11 @@
     }
     return true;
   }
-  function scrollToFunnel(){ const f=document.querySelector('.funnel'); if(!f) return; const y=f.getBoundingClientRect().top + window.pageYOffset - 16; window.scrollTo({top:y<0?0:y,behavior:'smooth'}); }
+  function scrollToFunnel(){
+    /* Embed: nur das eigene Dokument nach oben – kein scrollIntoView, das würde die Eltern-Seite mitscrollen. */
+    if (IS_EMBEDDED) { window.scrollTo({ top: 0, behavior: 'instant' }); return; }
+    const f=document.querySelector('.funnel'); if(!f) return; const y=f.getBoundingClientRect().top + window.pageYOffset - 16; window.scrollTo({top:y<0?0:y,behavior:'smooth'});
+  }
   function next(){
     if (i < QUESTIONS.length) {
       if (!stepValid()) { shakeBody(); return; }
