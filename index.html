@@ -216,6 +216,7 @@
   </div>
 </footer>
 
+<script src="normalize-phone.js"></script>
 <script>
   const faqs = [
     ["Ist der Baukosten-Check kostenlos?", "Ja, der Baukosten-Check ist vollständig kostenlos und unverbindlich."],
@@ -237,6 +238,14 @@
   const WA_NUMBER = '436765409552';
   const USE_IMAGES = false;
   const IS_EMBEDDED = document.documentElement.classList.contains('embedded');
+  /* GoHighLevel Inbound-Webhook-URL. Leer lassen = es wird nichts gesendet, alles andere
+     funktioniert unverändert. (Statisches Projekt ohne Build-Schritt, daher Konstante
+     statt Env-Variable VITE_GHL_WEBHOOK_URL.) */
+  const GHL_WEBHOOK_URL = '';
+  /* Der String "Baukosten-Check" muss im vorbefüllten WhatsApp-Text enthalten sein –
+     darauf filtert ein GoHighLevel-Workflow. */
+  const WA_TEXT_NEUBAU = 'Hallo! Ich habe den Baukosten-Check ausgefüllt und möchte meine Preisrange erhalten.';
+  const WA_TEXT_SANIERUNG = 'Hallo! Ich habe den Baukosten-Check ausgefüllt und möchte meine individuelle Sanierungs-Einschätzung erhalten.';
 
   const ICONS = {
     efh:'<path d="M8 22 24 9 40 22"/><path d="M12 21v13h24V21"/><path d="M21 34v-7h6v7"/>',
@@ -283,7 +292,7 @@
     'Carport':'Überdachter Stellplatz (offen)'
   };
 
-  const answers = {}; const kontakt = { name:'', consent:false };
+  const answers = {}; const kontakt = { name:'', phone:'', consent:false };
   const CONSENT_HTML = `<label class="consent"><input type="checkbox" id="qConsent"><span>Ich stimme zu, dass Reschbau meine übermittelten Daten im CRM-System speichern und verarbeiten darf, um meine Anfrage zu bearbeiten, und mich per E-Mail oder WhatsApp bezüglich dieser Anfrage kontaktieren darf. Ich kann diese Einwilligung jederzeit widerrufen.</span></label>`;
 
   const pitched = () => answers['Dachform'] && answers['Dachform'] !== 'Flachdach';
@@ -315,6 +324,35 @@
   }
   function speichereBaukosten(quelle){ if (answers['Vorhaben']==='Sanierung') return null; const b=berechneRange(); const payload={ zeit:new Date().toISOString(), quelle:quelle||'', eingaben:{...answers}, berechnung:b }; try{ localStorage.setItem('resch_baukosten', JSON.stringify(payload)); }catch(e){} console.log('%c[RESCH Baukosten-Berechnung]','color:#cf2027;font-weight:bold', payload); return payload; }
   window.zeigeBaukosten = function(){ try{ const d=JSON.parse(localStorage.getItem('resch_baukosten')||'null'); console.log('[RESCH] gespeicherte Berechnung:', d); return d; }catch(e){ return null; } };
+
+  /* ===== GoHighLevel Inbound-Webhook (fire-and-forget beim Absenden) ===== */
+  function ghlKey(k){ return k.toLowerCase().replace(/ä/g,'ae').replace(/ö/g,'oe').replace(/ü/g,'ue').replace(/ß/g,'ss').replace(/[^a-z0-9]+/g,'_').replace(/^_+|_+$/g,''); }
+  function baueGHLPayload(){
+    const isSan = answers['Vorhaben']==='Sanierung';
+    const p = {};
+    if (kontakt.name) p.name = kontakt.name; /* Name wird nur als ein Feld erfasst → als Ganzes senden */
+    if (kontakt.phone) p.phone = normalizePhoneAT(kontakt.phone);
+    if (!isSan) { const b = berechneRange(); p.price_min = b.range_low; p.price_max = b.range_high; }
+    p.projekt_typ = answers['Vorhaben'] || 'Neubau';
+    QUESTIONS.forEach(q => { for (const g of groupsOf(q)) {
+      if (g.key==='Vorhaben') continue;
+      let v = answers[g.key]; if (Array.isArray(v)) v = v.join(', ');
+      if (v) p[ghlKey(g.key)] = v;
+    } });
+    if (answers._m2exact && +answers._m2exact>0) p[isSan?'sanierungsflaeche':'wohnflaeche'] = +answers._m2exact;
+    if (answers._plz) p.plz = answers._plz;
+    p.consent = !!kontakt.consent;
+    p.source = 'baukosten-check';
+    p.submitted_at = new Date().toISOString();
+    return p;
+  }
+  function sendeAnGHL(){
+    if (!GHL_WEBHOOK_URL) return;
+    try {
+      fetch(GHL_WEBHOOK_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(baueGHLPayload()), keepalive:true })
+        .catch(err => console.warn('[RESCH] GHL-Webhook fehlgeschlagen:', err));
+    } catch(err) { console.warn('[RESCH] GHL-Webhook fehlgeschlagen:', err); }
+  }
 
   const START_Q = { key:'Vorhaben', title:'Was möchten Sie umsetzen?', layout:'img', type:'single', cols:2, opts:[
       {v:'Neubau', l:'Neubau', e:'🏗️'}, {v:'Sanierung', l:'Sanierung', e:'🛠️'} ]};
@@ -437,7 +475,7 @@
   qBody.addEventListener('input', (e) => { if (e.target.id==='m2exact') answers._m2exact = e.target.value.trim(); if (e.target.id==='plz') answers._plz = e.target.value.trim(); });
   qBody.addEventListener('change', (e) => { if (e.target.id==='qConsent'){ kontakt.consent = e.target.checked; if (e.target.checked){ const w=e.target.closest('.consent'); if (w) w.classList.remove('miss'); } } });
 
-  function captureContact(){ const n=document.getElementById('qName'); if (n) kontakt.name = n.value.trim(); const c=document.getElementById('qConsent'); if (c) kontakt.consent = c.checked; }
+  function captureContact(){ const n=document.getElementById('qName'); if (n) kontakt.name = n.value.trim(); const t=document.getElementById('qPhone'); if (t) kontakt.phone = t.value.trim(); const c=document.getElementById('qConsent'); if (c) kontakt.consent = c.checked; }
   function shakeBody(){ qBody.classList.remove('shake'); void qBody.offsetWidth; qBody.classList.add('shake'); }
   function stepValid(){
     const q = QUESTIONS[i];
@@ -468,7 +506,8 @@
   function submit(){
     const isSan = answers['Vorhaben']==='Sanierung';
     if (!isSan) speichereBaukosten('submit');
-    const lines = [isSan ? 'Hallo RESCH|Bau, ich interessiere mich für eine Sanierung / einen Umbau.' : 'Hallo RESCH|Bau, ich interessiere mich für einen Neubau.', '', 'Meine Angaben:'];
+    sendeAnGHL(); /* fire-and-forget – kein await, darf das Öffnen von WhatsApp nicht verzögern */
+    const lines = [isSan ? WA_TEXT_SANIERUNG : WA_TEXT_NEUBAU, '', 'Meine Angaben:'];
     QUESTIONS.forEach(q => {
       for (const g of groupsOf(q)) { let v = answers[g.key]; if (Array.isArray(v)) v = v.length ? v.join(', ') : '-'; if (v) lines.push(`• ${g.key}: ${v}`); }
     });
