@@ -336,8 +336,8 @@
         { key:'Anzahl Gauben', title:'Wie viele Gauben sind geplant?', layout:'list', type:'single', showIf:()=>pitched()&&answers['Gauben']==='Ja', opts:[{v:'1 Gaube',l:'1 Gaube'},{v:'2 Gauben',l:'2 Gauben'},{v:'3 oder mehr Gauben',l:'3 oder mehr Gauben'},{v:'Noch offen',l:'Noch offen'}] },
         { key:'Dachflächenfenster', title:'Sind Dachflächenfenster geplant?', layout:'list', type:'single', showIf:pitched, opts:[{v:'Nein',l:'Nein'},{v:'Ja',l:'Ja'}] },
       ] },
-    { key:'Bauweise', title:'Welche Bauweise bevorzugen Sie?', layout:'img', type:'single', cols:3, photo:true, massivNote:true, opts:[
-      {v:'Massivbau', l:'Massivbau', s:'Ziegel / Beton', e:'🧱'}, {v:'Holzbau / Holzriegelbau', l:'Holzbau', s:'Holzriegelbau', e:'🪵'}, {v:'Fertigteilbau', l:'Fertigteilbau', s:'Vorgefertigt', e:'🏭'} ]},
+    { key:'Bauweise', title:'Welche Bauweise bevorzugen Sie?', layout:'img', type:'single', cols:3, massivNote:true, opts:[
+      {v:'Massivbau', l:'Massivbau', s:'Ziegel / Beton', img:'img/massivbau.jpg'}, {v:'Holzbau / Holzriegelbau', l:'Holzbau', s:'Holzriegelbau', img:'img/holzbau.jpg'}, {v:'Fertigteilbau', l:'Fertigteilbau', s:'Vorgefertigt', img:'img/fertigteilbau.jpg'} ]},
     { key:'Leistungsumfang', title:'Welcher Leistungsumfang soll kalkuliert werden?', layout:'list', type:'single', showDesc:true, opts:[
       {v:'Belagsfertig', l:'Belagsfertig', desc:'Malerfertig: Wände gemalt, Steckdosen vorhanden, ohne Boden.'},
       {v:'Schlüsselfertig standardisierte Innenausstattung', l:'Schlüsselfertig (standardisierte Innenausstattung)', desc:'Bezugsfertig: komplette Innenausstattung inkl. Böden, Türen und Sanitär.'} ]},
