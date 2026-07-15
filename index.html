@@ -329,8 +329,8 @@
       {v:'1 Geschoss / Bungalow', l:'1 Geschoss', s:'Bungalow', e:'🏠'}, {v:'2 Geschosse', l:'2 Geschosse', e:'🏠'}, {v:'3 Geschosse', l:'3 Geschosse', e:'🏢'} ]},
     { key:'Dachgeschoss', title:'Ist ein Dachgeschoss geplant?', layout:'list', type:'single', opts:[
       {v:'Nein', l:'Nein'}, {v:'Ja', l:'Ja'}, {v:'Noch offen', l:'Noch offen'} ]},
-    { key:'Dachform', title:'Welche Dachform bevorzugen Sie?', layout:'img', type:'single', cols:2, photo:true, opts:[
-      {v:'Flachdach', l:'Flachdach', e:'⏤'}, {v:'Satteldach', l:'Satteldach', e:'⛺'}, {v:'Walmdach', l:'Walmdach', e:'🏔️'}, {v:'Pultdach', l:'Pultdach', e:'📐'} ],
+    { key:'Dachform', title:'Welche Dachform bevorzugen Sie?', layout:'img', type:'single', cols:2, opts:[
+      {v:'Flachdach', l:'Flachdach', img:'img/flachdach.jpg'}, {v:'Satteldach', l:'Satteldach', img:'img/satteldach.jpg'}, {v:'Walmdach', l:'Walmdach', img:'img/walmdach.jpg'}, {v:'Pultdach', l:'Pultdach', img:'img/pultdach.jpg'} ],
       subs:[
         { key:'Gauben', title:'Sind Gauben gewünscht?', layout:'list', type:'single', showIf:pitched, opts:[{v:'Nein',l:'Nein'},{v:'Ja',l:'Ja'}] },
         { key:'Anzahl Gauben', title:'Wie viele Gauben sind geplant?', layout:'list', type:'single', showIf:()=>pitched()&&answers['Gauben']==='Ja', opts:[{v:'1 Gaube',l:'1 Gaube'},{v:'2 Gauben',l:'2 Gauben'},{v:'3 oder mehr Gauben',l:'3 oder mehr Gauben'},{v:'Noch offen',l:'Noch offen'}] },
