@@ -218,6 +218,9 @@
 
 <script src="normalize-phone.js"></script>
 <script>
+  /* GoHighLevel Inbound-Webhook: POST beim Absenden des Baukosten-Checks (fire-and-forget). */
+  const GHL_WEBHOOK_URL = "https://services.leadconnectorhq.com/hooks/u81XjgHeXminDUdujzg8/webhook-trigger/undefined";
+
   const faqs = [
     ["Ist der Baukosten-Check kostenlos?", "Ja, der Baukosten-Check ist vollständig kostenlos und unverbindlich."],
     ["Wie erhalte ich meine Preisrange?", "Sie senden uns Ihre Angaben über den Check – Ihre grobe Preisrange erhalten Sie anschließend persönlich per WhatsApp."],
@@ -238,10 +241,6 @@
   const WA_NUMBER = '436765409552';
   const USE_IMAGES = false;
   const IS_EMBEDDED = document.documentElement.classList.contains('embedded');
-  /* GoHighLevel Inbound-Webhook-URL. Leer lassen = es wird nichts gesendet, alles andere
-     funktioniert unverändert. (Statisches Projekt ohne Build-Schritt, daher Konstante
-     statt Env-Variable VITE_GHL_WEBHOOK_URL.) */
-  const GHL_WEBHOOK_URL = '';
   /* Der String "Baukosten-Check" muss im vorbefüllten WhatsApp-Text enthalten sein –
      darauf filtert ein GoHighLevel-Workflow. */
   const WA_TEXT_NEUBAU = 'Hallo! Ich habe den Baukosten-Check ausgefüllt und möchte meine Preisrange erhalten.';
@@ -327,11 +326,40 @@
 
   /* ===== GoHighLevel Inbound-Webhook (fire-and-forget beim Absenden) ===== */
   function ghlKey(k){ return k.toLowerCase().replace(/ä/g,'ae').replace(/ö/g,'oe').replace(/ü/g,'ue').replace(/ß/g,'ss').replace(/[^a-z0-9]+/g,'_').replace(/^_+|_+$/g,''); }
+
+  /* Slugifiziert den GANZEN eingegebenen Namen zu camelCase (keine Vor-/Nachname-Trennung,
+     da Titel/ungewöhnliche Schreibweisen sonst brechen). Umlaute werden transliteriert,
+     alles übrige Nicht-ASCII entfernt. Leerer Name → "anonym". */
+  function slugifyNameCamelCase(name){
+    let s = String(name == null ? '' : name).trim();
+    s = s
+      .replace(/ä/g,'ae').replace(/Ä/g,'Ae')
+      .replace(/ö/g,'oe').replace(/Ö/g,'Oe')
+      .replace(/ü/g,'ue').replace(/Ü/g,'Ue')
+      .replace(/ß/g,'ss').replace(/ẞ/g,'Ss');
+    s = s.replace(/[^a-zA-Z0-9\s]/g, ''); // verbleibende Nicht-ASCII-/Sonderzeichen entfernen
+    const words = s.split(/\s+/).filter(Boolean);
+    if (!words.length) return 'anonym';
+    return words.map((w, i) => { const lw = w.toLowerCase(); return i===0 ? lw : lw.charAt(0).toUpperCase()+lw.slice(1); }).join('');
+  }
+  function zufaelligeHex4(){
+    if (window.crypto && window.crypto.getRandomValues) {
+      const b = new Uint8Array(2); window.crypto.getRandomValues(b);
+      return Array.from(b, x => x.toString(16).padStart(2,'0')).join('');
+    }
+    return Math.floor(Math.random()*0x10000).toString(16).padStart(4,'0');
+  }
+  /* Erzeugt bei JEDEM Aufruf eine neue Pseudo-Adresse (Suffix wird nie gecacht) –
+     der Funnel fragt keine E-Mail ab, GHL braucht aber einen eindeutigen Identifier. */
+  function generiereGHLEmail(name){
+    return `${slugifyNameCamelCase(name)}-${zufaelligeHex4()}@leads.leadsystems.at`;
+  }
+
   function baueGHLPayload(){
     const isSan = answers['Vorhaben']==='Sanierung';
     const p = {};
-    if (kontakt.name) p.name = kontakt.name; /* Name wird nur als ein Feld erfasst → als Ganzes senden */
-    if (kontakt.phone) p.phone = normalizePhoneAT(kontakt.phone);
+    p.email = generiereGHLEmail(kontakt.name);
+    p.name = kontakt.name; /* wie eingegeben, unverändert */
     if (!isSan) { const b = berechneRange(); p.price_min = b.range_low; p.price_max = b.range_high; }
     p.projekt_typ = answers['Vorhaben'] || 'Neubau';
     QUESTIONS.forEach(q => { for (const g of groupsOf(q)) {
