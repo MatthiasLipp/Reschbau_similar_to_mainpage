@@ -327,38 +327,27 @@
   /* ===== GoHighLevel Inbound-Webhook (fire-and-forget beim Absenden) ===== */
   function ghlKey(k){ return k.toLowerCase().replace(/ä/g,'ae').replace(/ö/g,'oe').replace(/ü/g,'ue').replace(/ß/g,'ss').replace(/[^a-z0-9]+/g,'_').replace(/^_+|_+$/g,''); }
 
-  /* Slugifiziert den GANZEN eingegebenen Namen zu camelCase (keine Vor-/Nachname-Trennung,
-     da Titel/ungewöhnliche Schreibweisen sonst brechen). Umlaute werden transliteriert,
-     alles übrige Nicht-ASCII entfernt. Leerer Name → "anonym". */
-  function slugifyNameCamelCase(name){
-    let s = String(name == null ? '' : name).trim();
-    s = s
-      .replace(/ä/g,'ae').replace(/Ä/g,'Ae')
-      .replace(/ö/g,'oe').replace(/Ö/g,'Oe')
-      .replace(/ü/g,'ue').replace(/Ü/g,'Ue')
-      .replace(/ß/g,'ss').replace(/ẞ/g,'Ss');
-    s = s.replace(/[^a-zA-Z0-9\s]/g, ''); // verbleibende Nicht-ASCII-/Sonderzeichen entfernen
-    const words = s.split(/\s+/).filter(Boolean);
-    if (!words.length) return 'anonym';
-    return words.map((w, i) => { const lw = w.toLowerCase(); return i===0 ? lw : lw.charAt(0).toUpperCase()+lw.slice(1); }).join('');
-  }
-  function zufaelligeHex4(){
+  /* 8 zufällige Hex-Zeichen (lowercase) als Referenzschlüssel – pro Absendung einmal gewürfelt
+     und danach in E-Mail, Webhook-Payload (ref_key) und WhatsApp-Text (Ref-Zeile) wiederverwendet. */
+  function generiereRefKey(){
     if (window.crypto && window.crypto.getRandomValues) {
-      const b = new Uint8Array(2); window.crypto.getRandomValues(b);
+      const b = new Uint8Array(4); window.crypto.getRandomValues(b);
       return Array.from(b, x => x.toString(16).padStart(2,'0')).join('');
     }
-    return Math.floor(Math.random()*0x10000).toString(16).padStart(4,'0');
+    let s = ''; for (let i=0;i<8;i++) s += Math.floor(Math.random()*16).toString(16);
+    return s;
   }
-  /* Erzeugt bei JEDEM Aufruf eine neue Pseudo-Adresse (Suffix wird nie gecacht) –
-     der Funnel fragt keine E-Mail ab, GHL braucht aber einen eindeutigen Identifier. */
-  function generiereGHLEmail(name){
-    return `${slugifyNameCamelCase(name)}-${zufaelligeHex4()}@leads.leadsystems.at`;
+  /* Der Funnel fragt keine E-Mail ab, GHL braucht aber einen eindeutigen Identifier –
+     rein referenzbasiert, ohne Namensbestandteile. */
+  function generiereGHLEmail(refKey){
+    return `bk-${refKey}@leads.leadsystems.at`;
   }
 
-  function baueGHLPayload(){
+  function baueGHLPayload(refKey){
     const isSan = answers['Vorhaben']==='Sanierung';
     const p = {};
-    p.email = generiereGHLEmail(kontakt.name);
+    p.email = generiereGHLEmail(refKey);
+    p.ref_key = refKey;
     p.name = kontakt.name; /* wie eingegeben, unverändert */
     if (!isSan) { const b = berechneRange(); p.price_min = b.range_low; p.price_max = b.range_high; }
     p.projekt_typ = answers['Vorhaben'] || 'Neubau';
@@ -374,10 +363,10 @@
     p.submitted_at = new Date().toISOString();
     return p;
   }
-  function sendeAnGHL(){
+  function sendeAnGHL(refKey){
     if (!GHL_WEBHOOK_URL) return;
     try {
-      fetch(GHL_WEBHOOK_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(baueGHLPayload()), keepalive:true })
+      fetch(GHL_WEBHOOK_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(baueGHLPayload(refKey)), keepalive:true })
         .catch(err => console.warn('[RESCH] GHL-Webhook fehlgeschlagen:', err));
     } catch(err) { console.warn('[RESCH] GHL-Webhook fehlgeschlagen:', err); }
   }
@@ -534,7 +523,8 @@
   function submit(){
     const isSan = answers['Vorhaben']==='Sanierung';
     if (!isSan) speichereBaukosten('submit');
-    sendeAnGHL(); /* fire-and-forget – kein await, darf das Öffnen von WhatsApp nicht verzögern */
+    const refKey = generiereRefKey(); /* einmal würfeln – identisch in E-Mail, Webhook-Payload und WhatsApp-Text */
+    sendeAnGHL(refKey); /* fire-and-forget – kein await, darf das Öffnen von WhatsApp nicht verzögern */
     const lines = [isSan ? WA_TEXT_SANIERUNG : WA_TEXT_NEUBAU, '', 'Meine Angaben:'];
     QUESTIONS.forEach(q => {
       for (const g of groupsOf(q)) { let v = answers[g.key]; if (Array.isArray(v)) v = v.length ? v.join(', ') : '-'; if (v) lines.push(`• ${g.key}: ${v}`); }
@@ -544,6 +534,7 @@
     if (kontakt.name) lines.push('', `• Name: ${kontakt.name}`);
     if (kontakt.consent) lines.push(`• Einwilligung Datenverarbeitung & Kontakt: erteilt`);
     lines.push('', isSan ? 'Bitte meldet euch für eine individuelle Sanierungs-Einschätzung. Danke!' : 'Bitte schickt mir meine grobe Preisrange und meldet euch für ein persönliches Gespräch. Danke!');
+    lines.push(`Ref: ${refKey}`);
     window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(lines.join('\n'))}`, '_blank');
   }
 
