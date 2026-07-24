@@ -531,10 +531,10 @@
     });
     if (answers._m2exact) lines.push(`• Exakte Fläche: ${answers._m2exact} m²`);
     if (answers._plz) lines.push(`• PLZ: ${answers._plz}`);
+    lines.push(`• Ref: ${refKey}`);
     if (kontakt.name) lines.push('', `• Name: ${kontakt.name}`);
     if (kontakt.consent) lines.push(`• Einwilligung Datenverarbeitung & Kontakt: erteilt`);
     lines.push('', isSan ? 'Bitte meldet euch für eine individuelle Sanierungs-Einschätzung. Danke!' : 'Bitte schickt mir meine grobe Preisrange und meldet euch für ein persönliches Gespräch. Danke!');
-    lines.push(`Ref: ${refKey}`);
     window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(lines.join('\n'))}`, '_blank');
   }
 
