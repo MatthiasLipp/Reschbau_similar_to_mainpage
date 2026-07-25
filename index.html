@@ -218,8 +218,13 @@
 
 <script src="normalize-phone.js"></script>
 <script>
-  /* GoHighLevel Inbound-Webhook: POST beim Absenden des Baukosten-Checks (fire-and-forget). */
-  const GHL_WEBHOOK_URL = "https://services.leadconnectorhq.com/hooks/u81XjgHeXminDUdujzg8/webhook-trigger/undefined";
+  /* GoHighLevel Inbound-Webhook: POST beim Absenden des Baukosten-Checks.
+     URL als benannte Konstante, damit sie zum Testen (z. B. gegen webhook.site) getauscht
+     werden kann, ohne die Logik anzufassen. Leer = deaktiviert. */
+  const GHL_WEBHOOK_URL = "https://services.leadconnectorhq.com/hooks/u81XjgHeXminDUdujzg8/webhook-trigger/OslL59ZcGOzhrfuMVS8s";
+  /* DEBUG: bei true wird direkt vor dem Absenden Ziel-URL, alle Header und der Payload
+     in die Konsole geloggt. Im Normalbetrieb ausgeschaltet lassen. */
+  const GHL_DEBUG = false;
 
   const faqs = [
     ["Ist der Baukosten-Check kostenlos?", "Ja, der Baukosten-Check ist vollständig kostenlos und unverbindlich."],
@@ -324,32 +329,52 @@
   function speichereBaukosten(quelle){ if (answers['Vorhaben']==='Sanierung') return null; const b=berechneRange(); const payload={ zeit:new Date().toISOString(), quelle:quelle||'', eingaben:{...answers}, berechnung:b }; try{ localStorage.setItem('resch_baukosten', JSON.stringify(payload)); }catch(e){} console.log('%c[RESCH Baukosten-Berechnung]','color:#cf2027;font-weight:bold', payload); return payload; }
   window.zeigeBaukosten = function(){ try{ const d=JSON.parse(localStorage.getItem('resch_baukosten')||'null'); console.log('[RESCH] gespeicherte Berechnung:', d); return d; }catch(e){ return null; } };
 
-  /* ===== GoHighLevel Inbound-Webhook (fire-and-forget beim Absenden) ===== */
+  /* ===== GoHighLevel Inbound-Webhook (awaited POST beim Absenden, vor der wa.me-Weiterleitung) ===== */
   function ghlKey(k){ return k.toLowerCase().replace(/ä/g,'ae').replace(/ö/g,'oe').replace(/ü/g,'ue').replace(/ß/g,'ss').replace(/[^a-z0-9]+/g,'_').replace(/^_+|_+$/g,''); }
 
-  /* 8 zufällige Hex-Zeichen (lowercase) als Referenzschlüssel – pro Absendung einmal gewürfelt
-     und danach in E-Mail, Webhook-Payload (ref_key) und WhatsApp-Text (Ref-Zeile) wiederverwendet. */
+  /* Referenzschlüssel im Format "RB-" + 6 Zeichen aus einem verwechslungssicheren Alphabet
+     (ohne 0/O/1/I/L). Pro Absendung einmal gewürfelt und danach identisch in E-Mail-Suffix,
+     Webhook-Payload (ref_key) und WhatsApp-Text (Ref-Key-Zeile) wiederverwendet.
+     Zufall ausschließlich über crypto.getRandomValues. Das Alphabet hat 32 Zeichen (Zweierpotenz),
+     daher ist "Byte & 31" gleichverteilt – kein Modulo-Bias. */
+  const REFKEY_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
   function generiereRefKey(){
-    if (window.crypto && window.crypto.getRandomValues) {
-      const b = new Uint8Array(4); window.crypto.getRandomValues(b);
-      return Array.from(b, x => x.toString(16).padStart(2,'0')).join('');
-    }
-    let s = ''; for (let i=0;i<8;i++) s += Math.floor(Math.random()*16).toString(16);
-    return s;
+    const b = new Uint8Array(6); window.crypto.getRandomValues(b);
+    let s = '';
+    for (let i=0;i<6;i++) s += REFKEY_ALPHABET[b[i] & 31];
+    return 'RB-' + s;
   }
-  /* Der Funnel fragt keine E-Mail ab, GHL braucht aber einen eindeutigen Identifier –
-     rein referenzbasiert, ohne Namensbestandteile. */
-  function generiereGHLEmail(refKey){
-    return `bk-${refKey}@leads.leadsystems.at`;
+
+  /* Slugifiziert den GANZEN eingegebenen Namen zu camelCase (keine Vor-/Nachname-Trennung,
+     da Titel/ungewöhnliche Schreibweisen sonst brechen). Umlaute werden transliteriert,
+     alles übrige Nicht-ASCII entfernt. Leerer Name → "anonym". */
+  function slugifyNameCamelCase(name){
+    let s = String(name == null ? '' : name).trim();
+    s = s
+      .replace(/ä/g,'ae').replace(/Ä/g,'Ae')
+      .replace(/ö/g,'oe').replace(/Ö/g,'Oe')
+      .replace(/ü/g,'ue').replace(/Ü/g,'Ue')
+      .replace(/ß/g,'ss').replace(/ẞ/g,'Ss');
+    s = s.replace(/[^a-zA-Z0-9\s]/g, ''); // verbleibende Nicht-ASCII-/Sonderzeichen entfernen
+    const words = s.split(/\s+/).filter(Boolean);
+    if (!words.length) return 'anonym';
+    return words.map((w, i) => { const lw = w.toLowerCase(); return i===0 ? lw : lw.charAt(0).toUpperCase()+lw.slice(1); }).join('');
+  }
+  /* Der Funnel fragt keine E-Mail ab, GHL braucht aber einen eindeutigen Identifier.
+     Aufbau: <camelCaseName>-<refKeyOhnePrefix>@leads.leadsystems.at, damit E-Mail-Suffix
+     und ref_key denselben Schlüssel tragen. */
+  function generiereGHLEmail(name, refKey){
+    return `${slugifyNameCamelCase(name)}-${refKey.replace(/^RB-/, '')}@leads.leadsystems.at`;
   }
 
   function baueGHLPayload(refKey){
     const isSan = answers['Vorhaben']==='Sanierung';
     const p = {};
-    p.email = generiereGHLEmail(refKey);
+    p.email = generiereGHLEmail(kontakt.name, refKey);
     p.ref_key = refKey;
     p.name = kontakt.name; /* wie eingegeben, unverändert */
     if (!isSan) { const b = berechneRange(); p.price_min = b.range_low; p.price_max = b.range_high; }
+    else { p.price_min = null; p.price_max = null; } /* Sanierung: keine Range, aber Felder explizit als null im Payload */
     p.projekt_typ = answers['Vorhaben'] || 'Neubau';
     QUESTIONS.forEach(q => { for (const g of groupsOf(q)) {
       if (g.key==='Vorhaben') continue;
@@ -363,12 +388,27 @@
     p.submitted_at = new Date().toISOString();
     return p;
   }
-  function sendeAnGHL(refKey){
+  /* Sendet den Payload an GHL – bewusst GENAU EIN POST, damit der Hook nie doppelt triggert.
+     - Normaler CORS-Request (kein mode:'no-cors'); wegen Content-Type application/json ist er
+       preflight-pflichtig (OPTIONS vorab).
+     - Antwortet GHL ohne CORS-Header, kann das fetch-Promise rejecten, OBWOHL der POST den
+       Server erreicht hat. Aus dem gefangenen Fehler lässt sich NICHT unterscheiden, ob der
+       Request draußen war oder nicht – deshalb hier KEIN sendBeacon-Fallback: der würde bei
+       jedem Fehler feuern und könnte einen zweiten POST auslösen.
+     - keepalive:true übernimmt die Rolle, die sonst sendBeacon hätte: der Request überlebt das
+       Entladen / den Seitenwechsel zu wa.me. */
+  const GHL_HEADERS = { 'Content-Type': 'application/json' };
+  async function sendeAnGHL(refKey){
     if (!GHL_WEBHOOK_URL) return;
+    const body = JSON.stringify(baueGHLPayload(refKey));
+    if (GHL_DEBUG) console.log('[RESCH][GHL] POST', { url: GHL_WEBHOOK_URL, headers: GHL_HEADERS, payload: JSON.parse(body) });
     try {
-      fetch(GHL_WEBHOOK_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(baueGHLPayload(refKey)), keepalive:true })
-        .catch(err => console.warn('[RESCH] GHL-Webhook fehlgeschlagen:', err));
-    } catch(err) { console.warn('[RESCH] GHL-Webhook fehlgeschlagen:', err); }
+      await fetch(GHL_WEBHOOK_URL, { method:'POST', headers:GHL_HEADERS, body, keepalive:true });
+    } catch(err) {
+      /* Kann eine geblockte CORS-Antwort sein (POST kam trotzdem an) oder ein echter Netzfehler –
+         nicht unterscheidbar, daher NICHT erneut senden. */
+      console.warn('[RESCH] GHL-Webhook: fetch-Promise rejected (Request kann trotz Fehler rausgegangen sein):', err);
+    }
   }
 
   const START_Q = { key:'Vorhaben', title:'Was möchten Sie umsetzen?', layout:'img', type:'single', cols:2, opts:[
@@ -520,22 +560,29 @@
     submit();
   }
   function prev(){ if (i>0) { if (i===QUESTIONS.length) captureContact(); i--; renderBody(); scrollToFunnel(); } }
-  function submit(){
+  async function submit(){
     const isSan = answers['Vorhaben']==='Sanierung';
     if (!isSan) speichereBaukosten('submit');
     const refKey = generiereRefKey(); /* einmal würfeln – identisch in E-Mail, Webhook-Payload und WhatsApp-Text */
-    sendeAnGHL(refKey); /* fire-and-forget – kein await, darf das Öffnen von WhatsApp nicht verzögern */
     const lines = [isSan ? WA_TEXT_SANIERUNG : WA_TEXT_NEUBAU, '', 'Meine Angaben:'];
     QUESTIONS.forEach(q => {
       for (const g of groupsOf(q)) { let v = answers[g.key]; if (Array.isArray(v)) v = v.length ? v.join(', ') : '-'; if (v) lines.push(`• ${g.key}: ${v}`); }
     });
     if (answers._m2exact) lines.push(`• Exakte Fläche: ${answers._m2exact} m²`);
     if (answers._plz) lines.push(`• PLZ: ${answers._plz}`);
-    lines.push(`• Ref: ${refKey}`);
     if (kontakt.name) lines.push('', `• Name: ${kontakt.name}`);
     if (kontakt.consent) lines.push(`• Einwilligung Datenverarbeitung & Kontakt: erteilt`);
     lines.push('', isSan ? 'Bitte meldet euch für eine individuelle Sanierungs-Einschätzung. Danke!' : 'Bitte schickt mir meine grobe Preisrange und meldet euch für ein persönliches Gespräch. Danke!');
-    window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(lines.join('\n'))}`, '_blank');
+    /* Ref-Key als eigene Zeile ganz am Ende – ein GHL-Workflow liest ihn per Regex ("Ref-Key: RB-…") aus. */
+    lines.push('', 'Bitte diese Zeile stehen lassen:', `Ref-Key: ${refKey}`);
+    const waUrl = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(lines.join('\n'))}`;
+    /* Reihenfolge: erst der Webhook-POST, dann WhatsApp. Das WhatsApp-Fenster wird synchron
+       im Klick-Kontext (about:blank) geöffnet, damit es nicht vom Popup-Blocker gestoppt wird,
+       und erst nach dem await auf die wa.me-URL gelenkt. */
+    const waWin = window.open('about:blank', '_blank');
+    await sendeAnGHL(refKey);
+    if (waWin) waWin.location.href = waUrl;
+    else window.location.href = waUrl; /* Popup blockiert → im selben Tab weiter */
   }
 
   renderBody();
