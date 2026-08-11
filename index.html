@@ -243,7 +243,10 @@
   });
 
   /* ===== Baukosten-Funnel (16 Fragen, inline; Preis kommt per WhatsApp) ===== */
-  const WA_NUMBER = '436765409552';
+  /* WhatsApp-Business-Nummer (nur Ziffern, E.164 ohne +). MUSS mit der in GHL angebundenen
+     Absendenummer des Baukosten-Check-Workflows übereinstimmen – sonst empfängt GHL die
+     eingehende Nachricht nicht und der Reply-Workflow löst nicht aus. */
+  const WA_NUMBER = '43676846470300';
   const USE_IMAGES = false;
   const IS_EMBEDDED = document.documentElement.classList.contains('embedded');
   /* Der String "Baukosten-Check" muss im vorbefüllten WhatsApp-Text enthalten sein –
