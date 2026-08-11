@@ -505,7 +505,7 @@
       const multiSel = (answers[multiKey]||[]).filter(x=>x!==noneVal);
       const multiRow = multiSel.length ? `<div><span>${multiKey}</span><span>${multiSel.join(', ')}</span></div>` : '';
       qBody.innerHTML = `<h3 class="qtitle">Fast geschafft!</h3>
-        <p class="qhint">Wie dürfen wir Sie erreichen? ${isSan?'Ihre individuelle Einschätzung':'Ihre grobe Preisrange'} senden wir Ihnen anschließend persönlich per WhatsApp.</p>
+        <p class="qhint">${isSan?'Ihre individuelle Einschätzung':'Ihre grobe Preisrange'} erhalten Sie anschließend persönlich per WhatsApp.</p>
         <div class="field"><label for="qName">Name</label><input id="qName" type="text" placeholder="Vor- und Nachname" value="${kontakt.name}"></div>
         <div class="summary">${rows}${multiRow}</div>
         <div class="wa-note"><svg width="20" height="20" viewBox="0 0 24 24" fill="#25d366"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2Z"/></svg><span>Mit „Per WhatsApp senden" schicken Sie uns Ihre Angaben. Sie erhalten ${isSan?'Ihre individuelle Einschätzung':'Ihre grobe Preisrange'} und alle Details persönlich per WhatsApp.</span></div>${CONSENT_HTML}`;
