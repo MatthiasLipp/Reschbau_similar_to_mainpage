@@ -495,7 +495,7 @@
       let html = `<h3 class="qtitle">${q.title}</h3><p class="qhint">${hint}</p>${groupHTML(q)}`;
       if (q.massivNote && answers[q.key] && answers[q.key] !== 'Massivbau') html += `<div class="qnote">Die Standard-Kalkulation von Reschbau ist aktuell auf Massivbau ausgelegt. Ihre Anfrage kann dennoch übermittelt und individuell geprüft werden.</div>`;
       if (q.exactM2) html += `<div class="qextra"><input id="m2exact" type="number" inputmode="numeric" min="20" placeholder="Exakte Fläche in m² (optional)" value="${answers._m2exact||''}"></div>`;
-      if (q.plz && answers[q.key]) html += `<div class="qextra"><label>PLZ (optional)</label><input id="plz" type="text" inputmode="numeric" maxlength="4" placeholder="z. B. 1010" value="${answers._plz||''}"></div>`;
+      if (q.plz && answers[q.key]) html += `<div class="qextra"><label>PLZ (erforderlich)</label><input id="plz" type="text" inputmode="numeric" maxlength="4" placeholder="z. B. 1010" value="${answers._plz||''}"></div>`;
       (q.subs||[]).forEach(s => { if (subVisible(s)) html += `<div class="qsub"><div class="qsublabel">${s.title}</div>${groupHTML(s)}</div>`; });
       qBody.innerHTML = html;
     } else {
@@ -537,6 +537,8 @@
 
   function captureContact(){ const n=document.getElementById('qName'); if (n) kontakt.name = n.value.trim(); const t=document.getElementById('qPhone'); if (t) kontakt.phone = t.value.trim(); const c=document.getElementById('qConsent'); if (c) kontakt.consent = c.checked; }
   function shakeBody(){ qBody.classList.remove('shake'); void qBody.offsetWidth; qBody.classList.add('shake'); }
+  /* PLZ ist bei der Region-Frage Pflicht (genau 4 Ziffern, österr. Format). */
+  function plzPflichtFehlt(){ const q = QUESTIONS[i]; return !!(q.plz && answers[q.key] && !/^\d{4}$/.test((answers._plz||'').trim())); }
   function stepValid(){
     const q = QUESTIONS[i];
     for (const g of groupsOf(q)) {
@@ -545,6 +547,7 @@
       if (g.exactM2 && answers._m2exact && +answers._m2exact>0) ok = true;
       if (!ok) return false;
     }
+    if (plzPflichtFehlt()) return false;
     return true;
   }
   function scrollToFunnel(){
@@ -554,7 +557,10 @@
   }
   function next(){
     if (i < QUESTIONS.length) {
-      if (!stepValid()) { shakeBody(); return; }
+      if (!stepValid()) {
+        if (plzPflichtFehlt()) { const p=document.getElementById('plz'); if (p) p.focus(); }
+        shakeBody(); return;
+      }
       i++; renderBody(); scrollToFunnel(); return;
     }
     captureContact();
