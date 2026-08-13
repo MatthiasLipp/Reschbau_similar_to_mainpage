@@ -327,7 +327,7 @@
     const dffZuschlag=(answers['Dachflächenfenster']==='Ja')?DACHFLAECHENFENSTER_PREIS:0;
     const extras=(answers['Extras']||[]).reduce((s,x)=>s+(EXTRA_PREISE[x]||0),0);
     const zwischensumme=basisNachLeistung+kellerkosten+dachZuschlag+gaubenZuschlag+dffZuschlag+extras;
-    return { wohnflaeche:wf, m2wert, basis, leistungsfaktor:lf, basisNachLeistung, geschosse, grundflaeche, kellerkosten, dachFaktor, dachZuschlag, gaubenZuschlag, dffZuschlag, extras, zwischensumme, range_low:Math.round(zwischensumme*0.90), range_high:Math.round(zwischensumme*1.20) };
+    return { wohnflaeche:wf, m2wert, basis, leistungsfaktor:lf, basisNachLeistung, geschosse, grundflaeche, kellerkosten, dachFaktor, dachZuschlag, gaubenZuschlag, dffZuschlag, extras, zwischensumme, range_low:Math.round(zwischensumme*0.92), range_high:Math.round(zwischensumme*1.08) };
   }
   function speichereBaukosten(quelle){ if (answers['Vorhaben']==='Sanierung') return null; const b=berechneRange(); const payload={ zeit:new Date().toISOString(), quelle:quelle||'', eingaben:{...answers}, berechnung:b }; try{ localStorage.setItem('resch_baukosten', JSON.stringify(payload)); }catch(e){} console.log('%c[RESCH Baukosten-Berechnung]','color:#cf2027;font-weight:bold', payload); return payload; }
   window.zeigeBaukosten = function(){ try{ const d=JSON.parse(localStorage.getItem('resch_baukosten')||'null'); console.log('[RESCH] gespeicherte Berechnung:', d); return d; }catch(e){ return null; } };
