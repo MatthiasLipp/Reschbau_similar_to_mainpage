@@ -37,6 +37,11 @@
   .logo-roof::before { content:""; position:absolute; top:-.42em; left:50%; transform:translateX(-50%); border-left:.5em solid transparent; border-right:.5em solid transparent; border-bottom:.45em solid var(--red); }
   .brand-tag { margin-top:.6rem; text-transform:uppercase; letter-spacing:.32em; font-weight:700; font-size:clamp(.62rem,2.6vw,.9rem); color:#3a3a3a; padding-left:.32em; }
 
+  /* ---- Zurück-Button (nur im Direktaufruf; im Embed ausgeblendet) ---- */
+  .topbar { width:min(960px,92vw); margin-inline:auto; padding:1.1rem 0 .2rem; }
+  .backlink { display:inline-flex; align-items:center; gap:.45rem; padding:.5rem .9rem; border:2px solid var(--line); background:#fff; font-weight:700; font-size:.8rem; color:var(--black); text-transform:uppercase; letter-spacing:.04em; transition:border-color .12s, color .12s; }
+  .backlink:hover { border-color:var(--red); color:var(--red); }
+
   /* ---- Hero ---- */
   .hero { padding:1rem 0 .5rem; text-align:center; }
   .headline { font-size:clamp(1.6rem,6vw,2.7rem); font-weight:800; color:var(--black); margin:.2rem 0 .9rem; letter-spacing:-.01em; line-height:1.12; }
@@ -150,6 +155,7 @@
   @media (max-width:360px){ .qcard-grid{ grid-template-columns:1fr; } }
 
   /* ---------- Embed-Modus (iFrame in Wix-Seite) ---------- */
+  html.embedded .topbar,
   html.embedded .brand,
   html.embedded .headline,
   html.embedded .badge,
@@ -163,12 +169,7 @@
 
 <a id="top"></a>
 
-<div class="brand">
-  <div class="logo" aria-label="RESCH Bau GmbH">
-    <span class="logo-r">R</span><span>ESCH</span><span class="logo-bar"></span><span class="logo-bau"><span class="logo-roof">GmbH</span>BAU</span>
-  </div>
-  <div class="brand-tag">Planungs- &amp; Bauunternehmen</div>
-</div>
+<div class="topbar"><a class="backlink" href="https://www.reschbau.at">← Zurück zur Hauptseite</a></div>
 
 <section class="hero">
   <div class="wrap">
