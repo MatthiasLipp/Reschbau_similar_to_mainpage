@@ -343,6 +343,7 @@
     'Carport':'Überdachter Stellplatz (offen)'
   };
 
+  let checkGestartet = false; /* ViewContent nur einmal pro Besuch senden */
   const answers = {}; const kontakt = { name:'', phone:'', consent:false };
   const CONSENT_HTML = `<label class="consent"><input type="checkbox" id="qConsent"><span>Ich stimme zu, dass Reschbau meine übermittelten Daten im CRM-System speichern und verarbeiten darf, um meine Anfrage zu bearbeiten, und mich per E-Mail oder WhatsApp bezüglich dieser Anfrage kontaktieren darf. Ich kann diese Einwilligung jederzeit widerrufen.</span></label>`;
 
@@ -573,7 +574,7 @@
       if (v===none) arr = arr.includes(v) ? [] : [v];
       else { if (none) arr = arr.filter(x=>x!==none); arr = arr.includes(v) ? arr.filter(x=>x!==v) : [...arr, v]; }
       answers[k] = arr;
-    } else { answers[k] = v; if (k==='Vorhaben') rebuildQuestions(); }
+    } else { answers[k] = v; if (k==='Vorhaben'){ rebuildQuestions(); if (!checkGestartet){ checkGestartet = true; trackMeta('ViewContent', { content_name: v }); } } }
     renderBody();
   });
   qBody.addEventListener('input', (e) => { if (e.target.id==='m2exact') answers._m2exact = e.target.value.trim(); if (e.target.id==='plz') answers._plz = e.target.value.trim(); });
