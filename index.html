@@ -164,6 +164,16 @@
   html.embedded footer { display:none; }
   html.embedded .hero { padding-top:.5rem; }
   html.embedded .funnel { margin-top:0; }
+
+  /* Cookie-Banner – Meta Pixel lädt erst nach Zustimmung (DSGVO / § 165 TKG) */
+  .cookiebar { position:fixed; left:1rem; right:1rem; bottom:1rem; z-index:1000; max-width:560px; margin:0 auto; background:#fff; border:2px solid var(--line); box-shadow:0 8px 28px rgba(0,0,0,.18); padding:1rem 1.1rem; font-size:.85rem; line-height:1.5; color:var(--ink); }
+  .cookiebar[hidden] { display:none; }
+  .cookiebar p { margin:0 0 .8rem; }
+  .cookiebar a { color:var(--red); }
+  .cookiebar .cb-btns { display:flex; gap:.6rem; }
+  .cookiebar button { flex:1; padding:.65rem .8rem; font:inherit; font-weight:700; text-transform:uppercase; letter-spacing:.04em; cursor:pointer; border:2px solid var(--line); background:#fff; color:var(--ink); }
+  .cookiebar button.cb-yes { background:var(--red); border-color:var(--red); color:#fff; }
+  .fcookie { background:none; border:0; padding:0; font:inherit; color:inherit; text-decoration:underline; cursor:pointer; }
 </style>
 </head>
 <body>
@@ -214,9 +224,41 @@
   <div class="wrap">
     <div class="flogo"><span class="r">R</span>ESCH|Bau GmbH</div>
     <div class="freg">Planungs- &amp; Bauunternehmen · Wien · Niederösterreich · Burgenland</div>
-    <div class="fcopy">© 2026 RESCH|Bau GmbH. Alle Rechte vorbehalten.</div>
+    <div class="fcopy">© 2026 RESCH|Bau GmbH. Alle Rechte vorbehalten. · <a href="https://www.reschbau.at/kontakt" target="_blank" rel="noopener">Impressum</a> · <button type="button" class="fcookie" id="cookieSettings">Cookie-Einstellungen</button></div>
   </div>
 </footer>
+
+<div class="cookiebar" id="cookiebar" role="dialog" aria-label="Cookie-Einstellungen" hidden>
+  <p>Wir möchten den Meta Pixel (Facebook) verwenden, um die Wirkung unserer Werbung zu messen. Dabei werden Daten an Meta Platforms übermittelt, auch in die USA. Das passiert nur mit Ihrer Zustimmung, die Sie jederzeit über „Cookie-Einstellungen“ im Seitenfuß widerrufen können. <a href="https://www.reschbau.at/kontakt" target="_blank" rel="noopener">Impressum</a></p>
+  <div class="cb-btns"><button type="button" class="cb-no" id="cookieNo">Ablehnen</button><button type="button" class="cb-yes" id="cookieYes">Akzeptieren</button></div>
+</div>
+<script>
+  /* Meta Pixel – wird ausschließlich nach Klick auf „Akzeptieren“ geladen. Entscheidung in localStorage. */
+  (function(){
+    const KEY='rb_cookie_consent', PIXEL_ID='1098287286431905';
+    const bar=document.getElementById('cookiebar');
+    const get=()=>{ try { return localStorage.getItem(KEY); } catch(e){ return null; } };
+    const set=v=>{ try { localStorage.setItem(KEY,v); } catch(e){} };
+    function loadPixel(){
+      if (window.fbq) return;
+      !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+      n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+      fbq('init', PIXEL_ID);
+      fbq('track', 'PageView');
+    }
+    document.getElementById('cookieYes').addEventListener('click',()=>{ set('granted'); bar.hidden=true; loadPixel(); });
+    document.getElementById('cookieNo').addEventListener('click',()=>{ const was=get()==='granted'; set('denied'); bar.hidden=true; if (was) location.reload(); });
+    document.getElementById('cookieSettings').addEventListener('click',()=>{ bar.hidden=false; });
+    const c=get();
+    if (c==='granted') loadPixel(); else if (c!=='denied') bar.hidden=false;
+  })();
+  /* Meta-Event nur senden, wenn der Pixel (mit Zustimmung) geladen ist */
+  function trackMeta(ev, params){ if (window.fbq) fbq('track', ev, params||{}); }
+</script>
 
 <script src="normalize-phone.js"></script>
 <script>
@@ -591,6 +633,7 @@
        im Klick-Kontext (about:blank) geöffnet, damit es nicht vom Popup-Blocker gestoppt wird,
        und erst nach dem await auf die wa.me-URL gelenkt. */
     const waWin = window.open('about:blank', '_blank');
+    trackMeta('Lead', { content_name: isSan ? 'Sanierung' : 'Neubau' });
     await sendeAnGHL(refKey);
     if (waWin) waWin.location.href = waUrl;
     else window.location.href = waUrl; /* Popup blockiert → im selben Tab weiter */
