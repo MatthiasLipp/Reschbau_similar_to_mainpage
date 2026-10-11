@@ -99,8 +99,9 @@
   .qcard:active { transform:scale(.99); }
   @media (hover:hover){ .qcard:hover { border-color:var(--red); box-shadow:0 8px 20px -12px rgba(0,0,0,.35); } }
   .qcard.sel { border-color:var(--red); background:#fcecec; }
-  .qcard .media { width:100%; aspect-ratio:3/2; display:grid; place-items:center; background:rgba(207,32,39,.07); overflow:hidden; }
-  .qcard .media img { width:100%; height:100%; object-fit:cover; }
+  .qcard .media { position:relative; width:100%; aspect-ratio:3/2; display:grid; place-items:center; background:rgba(207,32,39,.07); overflow:hidden; }
+  .qcard .media img { position:absolute; inset:0; display:block; width:100%; height:100%; object-fit:cover; }
+  .qcard .media .ai-badge { position:absolute; left:.35rem; bottom:.35rem; padding:.12rem .38rem; background:rgba(0,0,0,.62); color:#fff; font-size:.6rem; font-weight:700; letter-spacing:.03em; line-height:1.3; border-radius:3px; pointer-events:none; }
   .qcard .media .emoji { font-size:2.1rem; line-height:1; }
   .qcard .media svg.qicon { width:auto; height:66%; max-width:84%; stroke:#1e2630; fill:none; stroke-width:2.3; stroke-linecap:round; stroke-linejoin:round; }
   .qcard.sel .media svg.qicon { stroke:var(--red); }
@@ -472,7 +473,7 @@
   const subVisible = s => (typeof s.showIf==='function' ? s.showIf() : true);
   const groupsOf = q => [q, ...((q.subs||[]).filter(subVisible))];
 
-  function media(g, o){ if (o.img) return `<img src="${o.img}" alt="${o.l}">`; if (g.photo) return `<span class="photo-slot"><span class="ps-cam">📷</span>Foto von Resch</span>`; const ik=ICON_FOR[o.v]; return ICONS[ik] ? `<svg viewBox="0 0 48 40" class="qicon">${ICONS[ik]}</svg>` : `<span class="emoji">${o.e||'•'}</span>`; }
+  function media(g, o){ if (o.img) return `<img src="${o.img}" alt="${o.l} (KI-generiertes Bild)"><span class="ai-badge" aria-hidden="true">KI-generiert</span>`; if (g.photo) return `<span class="photo-slot"><span class="ps-cam">📷</span>Foto von Resch</span>`; const ik=ICON_FOR[o.v]; return ICONS[ik] ? `<svg viewBox="0 0 48 40" class="qicon">${ICONS[ik]}</svg>` : `<span class="emoji">${o.e||'•'}</span>`; }
   function optHTML(g, o){
     const isSel = g.type==='multi' ? (answers[g.key]||[]).includes(o.v) : answers[g.key]===o.v;
     const desc = o.s || INFO[o.v] || '';
