@@ -473,7 +473,7 @@
   const subVisible = s => (typeof s.showIf==='function' ? s.showIf() : true);
   const groupsOf = q => [q, ...((q.subs||[]).filter(subVisible))];
 
-  function media(g, o){ if (o.img) return `<img src="${o.img}" alt="${o.l} (KI-generiertes Bild)"><span class="ai-badge" aria-hidden="true">KI-generiert</span>`; if (g.photo) return `<span class="photo-slot"><span class="ps-cam">📷</span>Foto von Resch</span>`; const ik=ICON_FOR[o.v]; return ICONS[ik] ? `<svg viewBox="0 0 48 40" class="qicon">${ICONS[ik]}</svg>` : `<span class="emoji">${o.e||'•'}</span>`; }
+  function media(g, o){ if (o.img) return `<img src="${o.img}" alt="${o.l} (KI-generiertes Bild)"><span class="ai-badge" aria-hidden="true">KI</span>`; if (g.photo) return `<span class="photo-slot"><span class="ps-cam">📷</span>Foto von Resch</span>`; const ik=ICON_FOR[o.v]; return ICONS[ik] ? `<svg viewBox="0 0 48 40" class="qicon">${ICONS[ik]}</svg>` : `<span class="emoji">${o.e||'•'}</span>`; }
   function optHTML(g, o){
     const isSel = g.type==='multi' ? (answers[g.key]||[]).includes(o.v) : answers[g.key]===o.v;
     const desc = o.s || INFO[o.v] || '';
