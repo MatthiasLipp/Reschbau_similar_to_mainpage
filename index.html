@@ -5,9 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>RESCH|Bau – Baukosten-Check | Was kostet Ihr Neubau ungefähr?</title>
 <meta name="description" content="Baukosten-Check von RESCH|Bau: Beantworten Sie ein paar kurze Fragen zu Ihrem Neubau – Ihre grobe Preisspanne erhalten Sie anschließend per WhatsApp." />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
+<link href="fonts/fonts.css" rel="stylesheet" />
 <script>
   /* Embed-Modus: als iFrame (z. B. auf reschbau.at/baukosten-check) oder mit ?embedded=1.
      Läuft synchron im <head>, damit die Klasse vor dem ersten Paint gesetzt ist (kein Layout-Shift). */
@@ -144,6 +142,7 @@
   .wa-note { display:flex; gap:.6rem; align-items:flex-start; background:#eef9f1; border:1px solid #bfe6cc; padding:.9rem 1rem; font-size:.88rem; color:#1d4a2c; }
   .consent { display:flex; gap:.6rem; align-items:flex-start; margin-top:1rem; font-size:.82rem; color:#444; line-height:1.4; cursor:pointer; }
   .consent input { margin-top:.15rem; width:18px; height:18px; flex:none; accent-color:var(--red); cursor:pointer; }
+  .consent a { color:var(--red); }
   .consent.miss { color:var(--red); } .consent.miss input { outline:2px solid var(--red); }
 
   .btn-red { display:inline-flex; align-items:center; justify-content:center; gap:.5rem; background:var(--red); color:#fff; font-weight:700; font-size:1rem; min-height:52px; padding:.85rem 1.6rem; border:0; cursor:pointer; text-transform:uppercase; letter-spacing:.05em; transition:background .15s, transform .1s; }
@@ -224,12 +223,12 @@
   <div class="wrap">
     <div class="flogo"><span class="r">R</span>ESCH|Bau GmbH</div>
     <div class="freg">Planungs- &amp; Bauunternehmen · Wien · Niederösterreich · Burgenland</div>
-    <div class="fcopy">© 2026 RESCH|Bau GmbH. Alle Rechte vorbehalten. · <a href="https://www.reschbau.at/kontakt" target="_blank" rel="noopener">Impressum</a> · <button type="button" class="fcookie" id="cookieSettings">Cookie-Einstellungen</button></div>
+    <div class="fcopy">© 2026 RESCH|Bau GmbH. Alle Rechte vorbehalten. · <a href="https://www.reschbau.at/kontakt" target="_blank" rel="noopener">Impressum</a> · <a href="datenschutz.html">Datenschutz</a> · <button type="button" class="fcookie" id="cookieSettings">Cookie-Einstellungen</button></div>
   </div>
 </footer>
 
 <div class="cookiebar" id="cookiebar" role="dialog" aria-label="Cookie-Einstellungen" hidden>
-  <p>Wir möchten den Meta Pixel (Facebook) verwenden, um die Wirkung unserer Werbung zu messen. Dabei werden Daten an Meta Platforms übermittelt, auch in die USA. Das passiert nur mit Ihrer Zustimmung, die Sie jederzeit über „Cookie-Einstellungen“ im Seitenfuß widerrufen können. <a href="https://www.reschbau.at/kontakt" target="_blank" rel="noopener">Impressum</a></p>
+  <p>Wir möchten den Meta Pixel (Facebook) verwenden, um die Wirkung unserer Werbung zu messen. Dabei werden Daten an Meta Platforms übermittelt, auch in die USA. Das passiert nur mit Ihrer Zustimmung, die Sie jederzeit über „Cookie-Einstellungen“ im Seitenfuß widerrufen können. <a href="datenschutz.html" target="_blank">Datenschutzerklärung</a> · <a href="https://www.reschbau.at/kontakt" target="_blank" rel="noopener">Impressum</a></p>
   <div class="cb-btns"><button type="button" class="cb-no" id="cookieNo">Ablehnen</button><button type="button" class="cb-yes" id="cookieYes">Akzeptieren</button></div>
 </div>
 <script>
@@ -345,7 +344,7 @@
 
   let checkGestartet = false; /* ViewContent nur einmal pro Besuch senden */
   const answers = {}; const kontakt = { name:'', phone:'', consent:false };
-  const CONSENT_HTML = `<label class="consent"><input type="checkbox" id="qConsent"><span>Ich stimme zu, dass Reschbau meine übermittelten Daten im CRM-System speichern und verarbeiten darf, um meine Anfrage zu bearbeiten, und mich per E-Mail oder WhatsApp bezüglich dieser Anfrage kontaktieren darf. Ich kann diese Einwilligung jederzeit widerrufen.</span></label>`;
+  const CONSENT_HTML = `<label class="consent"><input type="checkbox" id="qConsent"><span>Ich stimme zu, dass Reschbau meine übermittelten Daten im CRM-System speichern und verarbeiten darf, um meine Anfrage zu bearbeiten, und mich per E-Mail oder WhatsApp bezüglich dieser Anfrage kontaktieren darf. Ich kann diese Einwilligung jederzeit widerrufen. Details in der <a href="datenschutz.html" target="_blank">Datenschutzerklärung</a>.</span></label>`;
 
   const pitched = () => answers['Dachform'] && answers['Dachform'] !== 'Flachdach';
 
