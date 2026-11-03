@@ -264,7 +264,7 @@
   /* GoHighLevel Inbound-Webhook: POST beim Absenden des Baukosten-Checks.
      URL als benannte Konstante, damit sie zum Testen (z. B. gegen webhook.site) getauscht
      werden kann, ohne die Logik anzufassen. Leer = deaktiviert. */
-  const GHL_WEBHOOK_URL = "https://services.leadconnectorhq.com/hooks/u81XjgHeXminDUdujzg8/webhook-trigger/OslL59ZcGOzhrfuMVS8s";
+  const GHL_WEBHOOK_URL = "https://services.leadconnectorhq.com/hooks/u81XjgHeXminDUdujzg8/webhook-trigger/31c6697c-ae2b-4844-8894-920fcb942626";
   /* DEBUG: bei true wird direkt vor dem Absenden Ziel-URL, alle Header und der Payload
      in die Konsole geloggt. Im Normalbetrieb ausgeschaltet lassen. */
   const GHL_DEBUG = false;
@@ -414,14 +414,17 @@
     return `${slugifyNameCamelCase(name)}-${refKey.replace(/^RB-/, '')}@leads.leadsystems.at`;
   }
 
+  function tausender(n){ return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
   function baueGHLPayload(refKey){
     const isSan = answers['Vorhaben']==='Sanierung';
     const p = {};
     p.email = generiereGHLEmail(kontakt.name, refKey);
     p.ref_key = refKey;
     p.name = kontakt.name; /* wie eingegeben, unverändert */
-    if (!isSan) { const b = berechneRange(); p.price_min = b.range_low; p.price_max = b.range_high; }
-    else { p.price_min = null; p.price_max = null; } /* Sanierung: keine Range, aber Felder explizit als null im Payload */
+    p.phone = normalizePhoneAT(kontakt.phone); /* E.164 (+43…), damit GHL die spätere WhatsApp-Nachricht demselben Kontakt zuordnet */
+    /* *_fmt: fertig formatiert (z. B. "400.000") für den WhatsApp-Text in GHL, damit dort kein Custom Code nötig ist */
+    if (!isSan) { const b = berechneRange(); p.price_min = b.range_low; p.price_max = b.range_high; p.price_min_fmt = tausender(b.range_low); p.price_max_fmt = tausender(b.range_high); }
+    else { p.price_min = null; p.price_max = null; p.price_min_fmt = ''; p.price_max_fmt = ''; } /* Sanierung: keine Range, aber Felder explizit als null im Payload */
     p.projekt_typ = answers['Vorhaben'] || 'Neubau';
     QUESTIONS.forEach(q => { for (const g of groupsOf(q)) {
       if (g.key==='Vorhaben') continue;
@@ -554,6 +557,7 @@
       qBody.innerHTML = `<h3 class="qtitle">Fast geschafft!</h3>
         <p class="qhint">${isSan?'Ihre individuelle Einschätzung':'Ihre grobe Preisspanne'} erhalten Sie anschließend persönlich per WhatsApp.</p>
         <div class="field"><label for="qName">Name</label><input id="qName" type="text" placeholder="Vor- und Nachname" value="${kontakt.name}"></div>
+        <div class="field"><label for="qPhone">Telefonnummer (WhatsApp)</label><input id="qPhone" type="tel" inputmode="tel" autocomplete="tel" placeholder="z. B. 0664 1234567" value="${kontakt.phone}"></div>
         <div class="summary">${rows}${multiRow}</div>
         <div class="wa-note"><svg width="20" height="20" viewBox="0 0 24 24" fill="#25d366"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2Z"/></svg><span>Mit „Per WhatsApp senden" schicken Sie uns Ihre Angaben. Sie erhalten ${isSan?'Ihre individuelle Einschätzung':'Ihre grobe Preisspanne'} und alle Details persönlich per WhatsApp.</span></div>${CONSENT_HTML}`;
     }
@@ -579,6 +583,8 @@
   qBody.addEventListener('input', (e) => { if (e.target.id==='m2exact') answers._m2exact = e.target.value.trim(); if (e.target.id==='plz') answers._plz = e.target.value.trim(); });
   qBody.addEventListener('change', (e) => { if (e.target.id==='qConsent'){ kontakt.consent = e.target.checked; if (e.target.checked){ const w=e.target.closest('.consent'); if (w) w.classList.remove('miss'); } } });
 
+  /* Nach der Normalisierung muss eine E.164-Nummer übrig bleiben (+ und 8–15 Ziffern). */
+  function telefonGueltig(raw){ return /^\+\d{8,15}$/.test(normalizePhoneAT(raw)); }
   function captureContact(){ const n=document.getElementById('qName'); if (n) kontakt.name = n.value.trim(); const t=document.getElementById('qPhone'); if (t) kontakt.phone = t.value.trim(); const c=document.getElementById('qConsent'); if (c) kontakt.consent = c.checked; }
   function shakeBody(){ qBody.classList.remove('shake'); void qBody.offsetWidth; qBody.classList.add('shake'); }
   /* PLZ ist bei der Region-Frage Pflicht (genau 4 Ziffern, österr. Format). */
@@ -609,6 +615,7 @@
     }
     captureContact();
     if (!kontakt.name) { const n=document.getElementById('qName'); if (n) n.focus(); shakeBody(); return; }
+    if (!telefonGueltig(kontakt.phone)) { const t=document.getElementById('qPhone'); if (t){ t.setCustomValidity('Bitte eine gültige Telefonnummer eingeben, z. B. 0664 1234567.'); t.reportValidity(); t.addEventListener('input', () => t.setCustomValidity(''), { once:true }); } shakeBody(); return; }
     if (!kontakt.consent) { const c=document.getElementById('qConsent'); if (c){ c.closest('.consent').classList.add('miss'); c.focus(); } shakeBody(); return; }
     submit();
   }
