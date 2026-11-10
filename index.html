@@ -344,7 +344,7 @@
 
   let checkGestartet = false; /* ViewContent nur einmal pro Besuch senden */
   const answers = {}; const kontakt = { name:'', phone:'', consent:false };
-  const CONSENT_HTML = `<label class="consent"><input type="checkbox" id="qConsent"><span>Ich stimme zu, dass Reschbau meine übermittelten Daten im CRM-System speichern und verarbeiten darf, um meine Anfrage zu bearbeiten, und mich per E-Mail oder WhatsApp bezüglich dieser Anfrage kontaktieren darf. Ich kann diese Einwilligung jederzeit widerrufen. Details in der <a href="datenschutz.html" target="_blank">Datenschutzerklärung</a>.</span></label>`;
+  const CONSENT_HTML = `<label class="consent"><input type="checkbox" id="qConsent"><span>Ich stimme zu, dass Reschbau meine übermittelten Daten im CRM-System speichern und verarbeiten darf, um meine Anfrage zu bearbeiten, und mich per WhatsApp oder telefonisch bezüglich dieser Anfrage kontaktieren darf. Ich kann diese Einwilligung jederzeit widerrufen. Details in der <a href="datenschutz.html" target="_blank">Datenschutzerklärung</a>.</span></label>`;
 
   const pitched = () => answers['Dachform'] && answers['Dachform'] !== 'Flachdach';
 
