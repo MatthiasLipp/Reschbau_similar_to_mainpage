@@ -430,7 +430,7 @@
   function trackingPayload(refKey){
     let granted=false; try { granted=localStorage.getItem('rb_cookie_consent')==='granted'; } catch(e){}
     const result={...trackingEntry, event_id:refKey, tracking_consent:granted,
-      tracking_version:'resch-2026-11-16', landing_path:window.location.pathname};
+      tracking_version:document.getElementById('qMetaQuality')?.checked ? 'resch-crm-consent-2026-11-17-yes' : 'resch-crm-consent-2026-11-17-no', landing_path:window.location.pathname};
     // Meta-Kennungen nur bei aktueller Zustimmung lesen/übermitteln.
     if (granted) {
       const click=new URLSearchParams(window.location.search).get('fbclid');
@@ -589,7 +589,7 @@
         <div class="field"><label for="qName">Name</label><input id="qName" type="text" placeholder="Vor- und Nachname" value="${kontakt.name}"></div>
         <div class="field"><label for="qPhone">Telefonnummer (WhatsApp)</label><input id="qPhone" type="tel" inputmode="tel" autocomplete="tel" placeholder="z. B. 0664 1234567" value="${kontakt.phone}"></div>
         <div class="summary">${rows}${multiRow}</div>
-        <div class="wa-note"><svg width="20" height="20" viewBox="0 0 24 24" fill="#25d366"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2Z"/></svg><span>Mit „Per WhatsApp senden" schicken Sie uns Ihre Angaben. Sie erhalten ${isSan?'Ihre individuelle Einschätzung':'Ihre grobe Preisspanne'} und alle Details persönlich per WhatsApp.</span></div>${CONSENT_HTML}`;
+        <div class="wa-note"><svg width="20" height="20" viewBox="0 0 24 24" fill="#25d366"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2Z"/></svg><span>Mit „Per WhatsApp senden" schicken Sie uns Ihre Angaben. Sie erhalten ${isSan?'Ihre individuelle Einschätzung':'Ihre grobe Preisspanne'} und alle Details persönlich per WhatsApp.</span></div>${CONSENT_HTML}<label class="consent"><input type="checkbox" id="qMetaQuality"><span><strong>Optional:</strong> Ich stimme zu, dass RESCH Bau den Bearbeitungsstatus meiner Anfrage (qualifiziert, Termin vereinbart oder Auftrag gewonnen), meine gehashte Telefonnummer und gegebenenfalls vorhandene Meta-Kennungen an Meta Platforms Ireland übermittelt, um Werbung zu messen und zu verbessern. Meta kann diese Daten meinem Konto zuordnen und auch in den USA verarbeiten. Meine Anfrage funktioniert auch ohne diese Zustimmung. Widerruf jederzeit per <a href="mailto:anspach@leadsystems.at?subject=Widerruf%20Meta-Qualit%C3%A4tsmessung">E-Mail</a> oder WhatsApp. <a href="datenschutz.html#crm-meta" target="_blank">Details zur Qualitätsmessung</a>.</span></label>`;
     }
     const total = QUESTIONS.length + 1;
     document.getElementById('progBar').style.width = ((i+1)/total*100) + '%';
