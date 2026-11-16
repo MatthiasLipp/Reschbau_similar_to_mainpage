@@ -256,7 +256,10 @@
     if (c==='granted') loadPixel(); else if (c!=='denied') bar.hidden=false;
   })();
   /* Meta-Event nur senden, wenn der Pixel (mit Zustimmung) geladen ist */
-  function trackMeta(ev, params){ if (window.fbq) fbq('track', ev, params||{}); }
+  function trackMeta(ev, params, eventID){
+    let allowed=false; try { allowed=localStorage.getItem('rb_cookie_consent')==='granted'; } catch(e){}
+    if (allowed && window.fbq) fbq('track', ev, params||{}, eventID ? {eventID} : {});
+  }
 </script>
 
 <script src="normalize-phone.js"></script>
@@ -415,6 +418,33 @@
   }
 
   function tausender(n){ return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
+  // Nur benannte Kampagnenparameter; keine vollständige URL oder beliebigen Query-Daten.
+  const trackingEntry = (() => {
+    const q=new URLSearchParams(window.location.search), result={};
+    for (const key of ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','campaign_id','adset_id','ad_id']) {
+      const value=q.get(key);
+      if (value && !/[<>\r\n]/.test(value)) result[key]=value.slice(0,200);
+    }
+    return result;
+  })();
+  function trackingPayload(refKey){
+    let granted=false; try { granted=localStorage.getItem('rb_cookie_consent')==='granted'; } catch(e){}
+    const result={...trackingEntry, event_id:refKey, tracking_consent:granted,
+      tracking_version:'resch-2026-11-16', landing_path:window.location.pathname};
+    // Meta-Kennungen nur bei aktueller Zustimmung lesen/übermitteln.
+    if (granted) {
+      const click=new URLSearchParams(window.location.search).get('fbclid');
+      if (click && /^[A-Za-z0-9_-]{1,500}$/.test(click)) result.fbclid=click;
+      for (const key of ['fbp','fbc']) {
+        const raw=(document.cookie||'').split(';').map(s=>s.trim()).find(s=>s.startsWith('_'+key+'='));
+        if (!raw) continue;
+        try { const value=decodeURIComponent(raw.slice(key.length+2));
+          if (/^fb\.\d+\.\d+\.[A-Za-z0-9_-]+$/.test(value) && value.length<=600) result[key]=value;
+        } catch(e){}
+      }
+    }
+    return result;
+  }
   function baueGHLPayload(refKey){
     const isSan = answers['Vorhaben']==='Sanierung';
     const p = {};
@@ -436,6 +466,7 @@
     p.consent = !!kontakt.consent;
     p.source = 'baukosten-check';
     p.submitted_at = new Date().toISOString();
+    Object.assign(p, trackingPayload(refKey));
     return p;
   }
   /* Sendet den Payload an GHL – bewusst GENAU EIN POST, damit der Hook nie doppelt triggert.
@@ -449,17 +480,16 @@
        Entladen / den Seitenwechsel zu wa.me. */
   const GHL_HEADERS = { 'Content-Type': 'application/json' };
   async function sendeAnGHL(refKey){
-    if (!GHL_WEBHOOK_URL) return;
-    const body = JSON.stringify(baueGHLPayload(refKey));
-    if (GHL_DEBUG) console.log('[RESCH][GHL] POST', { url: GHL_WEBHOOK_URL, headers: GHL_HEADERS, payload: JSON.parse(body) });
-    try {
-      await fetch(GHL_WEBHOOK_URL, { method:'POST', headers:GHL_HEADERS, body, keepalive:true });
-    } catch(err) {
-      /* Kann eine geblockte CORS-Antwort sein (POST kam trotzdem an) oder ein echter Netzfehler –
-         nicht unterscheidbar, daher NICHT erneut senden. */
-      console.warn('[RESCH] GHL-Webhook: fetch-Promise rejected (Request kann trotz Fehler rausgegangen sein):', err);
-    }
+    if (!GHL_WEBHOOK_URL) throw new Error('missing_endpoint');
+    const response=await fetch(GHL_WEBHOOK_URL, {
+      method:'POST', headers:GHL_HEADERS,
+      body:JSON.stringify(baueGHLPayload(refKey)), keepalive:true
+    });
+    if (!response.ok) throw new Error('http_'+response.status);
+    // 2xx bestätigt nur HTTP-Annahme, NICHT die Kontaktspeicherung in GHL.
+    return {webhookAccepted:true};
   }
+
 
   const START_Q = { key:'Vorhaben', title:'Was möchten Sie umsetzen?', layout:'img', type:'single', cols:2, opts:[
       {v:'Neubau', l:'Neubau', e:'🏗️'}, {v:'Sanierung', l:'Sanierung', e:'🛠️'} ]};
@@ -620,7 +650,20 @@
     submit();
   }
   function prev(){ if (i>0) { if (i===QUESTIONS.length) captureContact(); i--; renderBody(); scrollToFunnel(); } }
+  let submissionState='idle';
+  function showSubmissionStatus(message, waUrl){
+    let box=document.getElementById('submissionStatus');
+    if (!box) { box=document.createElement('div'); box.id='submissionStatus';
+      box.setAttribute('role','status'); document.getElementById('nextBtn').parentNode.appendChild(box); }
+    box.textContent=message+' ';
+    if (waUrl) { const link=document.createElement('a'); link.href=waUrl;
+      link.target='_blank'; link.rel='noopener'; link.textContent='WhatsApp öffnen'; box.appendChild(link); }
+  }
   async function submit(){
+    // Kein erneuter POST bei Doppelklick oder unklarem Netzwerkstatus.
+    if (submissionState!=='idle') return;
+    submissionState='sending';
+    const submitButton=document.getElementById('nextBtn'); submitButton.disabled=true;
     const isSan = answers['Vorhaben']==='Sanierung';
     if (!isSan) speichereBaukosten('submit');
     const refKey = generiereRefKey(); /* einmal würfeln – identisch in E-Mail, Webhook-Payload und WhatsApp-Text */
@@ -640,10 +683,19 @@
        im Klick-Kontext (about:blank) geöffnet, damit es nicht vom Popup-Blocker gestoppt wird,
        und erst nach dem await auf die wa.me-URL gelenkt. */
     const waWin = window.open('about:blank', '_blank');
-    trackMeta('Lead', { content_name: isSan ? 'Sanierung' : 'Neubau' });
-    await sendeAnGHL(refKey);
-    if (waWin) waWin.location.href = waUrl;
-    else window.location.href = waUrl; /* Popup blockiert → im selben Tab weiter */
+    try {
+      await sendeAnGHL(refKey);
+      submissionState='accepted';
+      // Stufe 1: ein Event pro HTTP-angenommener Anfrage. CRM-Bestätigung benötigt Stufe 2.
+      try { trackMeta('Lead', { content_name:isSan?'Sanierung':'Neubau',
+        submission_status:'webhook_accepted' }, refKey); } catch(e) { /* Tracking blockiert keine Anfrage. */ }
+      showSubmissionStatus('Anfrage übermittelt. Bitte senden Sie jetzt Ihre vorbereitete WhatsApp-Nachricht ab.', waUrl);
+      if (waWin) waWin.location.href=waUrl; else window.location.href=waUrl;
+    } catch(err) {
+      submissionState='unconfirmed';
+      if (waWin) waWin.close();
+      showSubmissionStatus('Die Übermittlung konnte nicht bestätigt werden. Bitte senden Sie Ihre Angaben über WhatsApp. Ihre Eingaben bleiben hier erhalten.', waUrl);
+    }
   }
 
   renderBody();
