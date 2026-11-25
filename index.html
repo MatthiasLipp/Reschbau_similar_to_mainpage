@@ -258,7 +258,8 @@
   /* Meta-Event nur senden, wenn der Pixel (mit Zustimmung) geladen ist */
   function trackMeta(ev, params, eventID){
     let allowed=false; try { allowed=localStorage.getItem('rb_cookie_consent')==='granted'; } catch(e){}
-    if (allowed && window.fbq) fbq('track', ev, params||{}, eventID ? {eventID} : {});
+    if (allowed && window.fbq) { fbq('track', ev, params||{}, eventID ? {eventID} : {}); return true; }
+    return false;
   }
 </script>
 
@@ -424,6 +425,11 @@
     for (const key of ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','campaign_id','adset_id','ad_id']) {
       const value=q.get(key);
       if (value && !/[<>\r\n]/.test(value)) result[key]=value.slice(0,200);
+    }
+    // Bestehende Anzeigen nutzen meta_ad_id; GHL erwartet ad_id.
+    for (const key of ['campaign_id','adset_id','ad_id']) {
+      const value=q.get('meta_'+key);
+      if (!result[key] && value && /^\d{5,30}$/.test(value)) result[key]=value;
     }
     return result;
   })();
@@ -657,7 +663,22 @@
       box.setAttribute('role','status'); document.getElementById('nextBtn').parentNode.appendChild(box); }
     box.textContent=message+' ';
     if (waUrl) { const link=document.createElement('a'); link.href=waUrl;
-      link.target='_blank'; link.rel='noopener'; link.textContent='WhatsApp öffnen'; box.appendChild(link); }
+      link.target='_blank'; link.rel='noopener'; link.className='btn-red';
+      link.style.marginTop='0.75rem'; link.textContent='WhatsApp öffnen & Nachricht senden'; box.appendChild(link); }
+  }
+  async function trackAcceptedLead(isSan, refKey){
+    try {
+      if (localStorage.getItem('rb_cookie_consent')!=='granted') return;
+      // Begrenztes Warten auf eine ggf. noch ladende Pixel-Bibliothek.
+      for (let attempt=0; attempt<15; attempt++) {
+        if (window.fbq && window.fbq.callMethod) break;
+        await new Promise(resolve=>setTimeout(resolve,100));
+        if (localStorage.getItem('rb_cookie_consent')!=='granted') return;
+      }
+      const queued=trackMeta('Lead', { content_name:isSan?'Sanierung':'Neubau',
+        submission_status:'webhook_accepted' }, refKey);
+      if (queued) await new Promise(resolve=>setTimeout(resolve,800));
+    } catch(e) { /* Tracking darf den WhatsApp-Link nicht verhindern. */ }
   }
   async function submit(){
     // Kein erneuter POST bei Doppelklick oder unklarem Netzwerkstatus.
@@ -679,21 +700,20 @@
     /* Ref-Key als eigene Zeile ganz am Ende – ein GHL-Workflow liest ihn per Regex ("Ref-Key: RB-…") aus. */
     lines.push('', 'Bitte diese Zeile stehen lassen:', `Ref-Key: ${refKey}`);
     const waUrl = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(lines.join('\n'))}`;
-    /* Reihenfolge: erst der Webhook-POST, dann WhatsApp. Das WhatsApp-Fenster wird synchron
-       im Klick-Kontext (about:blank) geöffnet, damit es nicht vom Popup-Blocker gestoppt wird,
-       und erst nach dem await auf die wa.me-URL gelenkt. */
-    const waWin = window.open('about:blank', '_blank');
+    // Kein leeres Popup vor dem POST: mobile In-App-Browser können die
+    // Quellseite dabei in den Hintergrund schicken und das Lead-Event unterbrechen.
     try {
       await sendeAnGHL(refKey);
       submissionState='accepted';
       // Stufe 1: ein Event pro HTTP-angenommener Anfrage. CRM-Bestätigung benötigt Stufe 2.
-      try { trackMeta('Lead', { content_name:isSan?'Sanierung':'Neubau',
-        submission_status:'webhook_accepted' }, refKey); } catch(e) { /* Tracking blockiert keine Anfrage. */ }
+      showSubmissionStatus('Anfrage übermittelt. WhatsApp wird vorbereitet.');
+      await trackAcceptedLead(isSan, refKey);
+      // Erst nach Tracking-Ansteuerung wechseln; Link bleibt als Rückfallweg sichtbar.
+      // Keine Aussage über Meta-Empfang: Blocker und fehlende Zustimmung bleiben möglich.
       showSubmissionStatus('Anfrage übermittelt. Bitte senden Sie jetzt Ihre vorbereitete WhatsApp-Nachricht ab.', waUrl);
-      if (waWin) waWin.location.href=waUrl; else window.location.href=waUrl;
+      window.location.href=waUrl;
     } catch(err) {
       submissionState='unconfirmed';
-      if (waWin) waWin.close();
       showSubmissionStatus('Die Übermittlung konnte nicht bestätigt werden. Bitte senden Sie Ihre Angaben über WhatsApp. Ihre Eingaben bleiben hier erhalten.', waUrl);
     }
   }
@@ -702,3 +722,4 @@
 </script>
 </body>
 </html>
+
